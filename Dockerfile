@@ -1,14 +1,17 @@
-# Imagem base para o Node.js
-FROM node:14
-
-WORKDIR /app
-
+FROM node:16-alpine AS builder
+WORKDIR /build
 COPY package*.json ./
+RUN npm ci
+COPY tsconfig*.json ./
+COPY src src
+RUN npm run build
 
+FROM node:16-alpine
+RUN apk add --no-cache tini
+WORKDIR /app
+COPY package*.json ./
+ENV NODE_ENV=production
 RUN npm install
-
-COPY . .
-
+COPY --from=builder /build/dist dist
 EXPOSE 3000
-
-CMD [ "npm", "start" ]
+ENTRYPOINT [ "/sbin/tini","--", "node", "dist/server/index.js" ]
