@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   db:
     image: postgres
@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: mydatabase
     volumes:
       - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -26,6 +28,11 @@ services:
     restart: always
     ports:
       - 3000:3000
+    expose:
+      - '3000'
+    volumes:
+      - ./src:/home/node/app/src
+    command: npm run start
     depends_on:
       - db
       - pgadmin
