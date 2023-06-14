@@ -9,8 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node dist/adapter/driver/program.js",
-    "dev": "nodemon src/adapter/driver/program.ts"
+    "start": "node dist/server/index.js",
+    "dev": "nodemon src/server/index.ts"
   },
   "author": "",
   "license": "ISC",
