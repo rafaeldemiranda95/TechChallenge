@@ -10,7 +10,7 @@ class UsuarioRepository implements IUsuarioRepository{
                 senha: usuario.senha,
                 cpf: usuario.cpf
             }
-        }).then((usuario) => {
+        }).then((usuario:any) => {
             return usuario;
         });
 
