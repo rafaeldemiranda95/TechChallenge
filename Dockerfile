@@ -14,4 +14,4 @@ ENV NODE_ENV=production
 RUN npm install
 COPY --from=builder /build/dist dist
 EXPOSE 3000
-ENTRYPOINT [ "/sbin/tini","--", "node", "dist/server/index.js" ]
+ENTRYPOINT [ "/sbin/tini","--", "node", "dist//adapter/driver/program.js" ]

@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: mydatabase
     volumes:
       - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -30,7 +32,6 @@ services:
       - '3000'
     volumes:
       - ./src:/home/node/app/src
-    #   - ./nodemon.json:/home/node/app/nodemon.json
     command: npm run start
     depends_on:
       - db
