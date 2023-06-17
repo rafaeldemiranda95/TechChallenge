@@ -13,7 +13,9 @@ datasource db {
 model Usuario {
   id    Int     @id @default(autoincrement())
   email String  @unique
-  nome  String?
-  cpf   String?
+  nome  String
+  cpf   String  @unique
+  tipo  String  @default("cliente")
   senha String?
+  token String?
 }
