@@ -5,6 +5,37 @@ const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
 export class UsuarioRepository implements IUsuarioRepository {
+  async renovarToken(token: string): Promise<string | undefined> {
+    let getUsuarioDb = await prisma.usuario.findUnique({
+      where: {
+        token: token,
+      },
+    });
+    if (getUsuarioDb) {
+      let token = jwt.sign({ id: getUsuarioDb.id }, process.env.JWT_SECRET, {
+        expiresIn: null,
+      });
+      await prisma.usuario.update({
+        where: { id: getUsuarioDb.id },
+        data: { token: token },
+      });
+      return token;
+    } else {
+      return undefined;
+    }
+  }
+  async validarToken(token: string): Promise<boolean | undefined> {
+    let getUsuarioDb = await prisma.usuario.findUnique({
+      where: {
+        token: token,
+      },
+    });
+    if (getUsuarioDb) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   async autenticar(usuario: Usuario): Promise<string | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
@@ -16,7 +47,7 @@ export class UsuarioRepository implements IUsuarioRepository {
       let validaSenha = bcrypt.compareSync(usuario.senha, getUsuarioDb.senha);
       if (validaSenha) {
         let token = jwt.sign({ id: getUsuarioDb.id }, process.env.JWT_SECRET, {
-          expiresIn: 86400,
+          expiresIn: null,
         });
         await prisma.usuario.update({
           where: { id: getUsuarioDb.id },

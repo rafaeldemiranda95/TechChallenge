@@ -17,5 +17,5 @@ model Usuario {
   cpf   String  @unique
   tipo  String  @default("cliente")
   senha String?
-  token String?
+  token String? @unique
 }
