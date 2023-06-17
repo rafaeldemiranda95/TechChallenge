@@ -7,7 +7,7 @@ export class UsuarioService {
     } catch (error: any) {
       let errorType = JSON.parse(error.message);
       if (errorType.code == 'P2002') {
-        return res.status(400).send(`${errorType.field} já cadastrado`);
+        res.status(400).send(`${errorType.field} já cadastrado`);
       }
     }
   }
@@ -18,22 +18,21 @@ export class UsuarioService {
     } catch (error: any) {
       let errorType = JSON.parse(error.message);
       if (errorType.code == 'P2002') {
-        return res.status(400).send(`${errorType.field} já cadastrado`);
+        throw new Error(errorType.field);
       }
-      throw new Error(error);
     }
   }
 
-  // async autenticaUsuario(usuario: Usuario, res: any) {
-  //   try {
-  //     let usuarioAutenticado = await new UsuarioRepository().autenticar(usuario);
-  //     if (usuarioAutenticado) {
-  //       res.status(200).send(usuarioAutenticado.token);
-  //     } else {
-  //       res.status(400).send('Usuário ou senha inválidos');
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error);
-  //   }
-  // }
+  async autenticaUsuario(usuario: Usuario, res: any) {
+    try {
+      let verificaUsuario = await new UsuarioRepository().autenticar(usuario);
+      if (verificaUsuario == undefined) {
+        res.status(400).send('Usuário não encontrado');
+      }else{
+        res.status(200).send(verificaUsuario);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 }
