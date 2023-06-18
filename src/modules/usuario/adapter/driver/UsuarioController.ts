@@ -6,7 +6,6 @@ export class UsuarioController {
     try {
       let usuarioService = new UsuarioService();
       let cpfObj = new CPF(cpf);
-      console.log(cpfObj);
       if (cpfObj.value) {
         let usuario = new Usuario(nome, email, cpf);
         await usuarioService.cadastraUsuario(usuario, res);

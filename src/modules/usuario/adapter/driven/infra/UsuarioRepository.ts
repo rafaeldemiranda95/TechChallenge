@@ -46,9 +46,18 @@ export class UsuarioRepository implements IUsuarioRepository {
     if (getUsuarioDb) {
       let validaSenha = bcrypt.compareSync(usuario.senha, getUsuarioDb.senha);
       if (validaSenha) {
-        let token = jwt.sign({ id: getUsuarioDb.id }, process.env.JWT_SECRET, {
-          expiresIn: null,
-        });
+        let token = jwt.sign(
+          {
+            id: getUsuarioDb.id,
+            nome: getUsuarioDb.nome,
+            email: getUsuarioDb.email,
+            tipo: getUsuarioDb.tipo,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: '365d',
+          }
+        );
         await prisma.usuario.update({
           where: { id: getUsuarioDb.id },
           data: { token: token },
