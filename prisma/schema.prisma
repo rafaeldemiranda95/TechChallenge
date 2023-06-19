@@ -17,3 +17,12 @@ model Usuario {
   cpf   String?
   senha String?
 }
+
+model Produto {
+  id        Int    @id @default(autoincrement())
+  nome      String
+  categoria String
+  preco     Float
+  descricao String
+  imagem    String
+}
