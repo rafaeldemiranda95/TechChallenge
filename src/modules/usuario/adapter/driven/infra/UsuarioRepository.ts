@@ -36,7 +36,7 @@ export class UsuarioRepository implements IUsuarioRepository {
       return false;
     }
   }
-  async autenticar(usuario: Usuario): Promise<string | undefined> {
+  async autenticaAdministrador(usuario: Usuario): Promise<string | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
         email: usuario.email,
@@ -71,6 +71,38 @@ export class UsuarioRepository implements IUsuarioRepository {
 
     return undefined;
   }
+
+  async autenticaCliente(usuario: Usuario): Promise<string | undefined> {
+    try {
+      let getUsuarioDb = await prisma.usuario.findUnique({
+        where: {
+          cpf: usuario.cpf,
+        },
+      });
+      if (getUsuarioDb) {
+          let token = jwt.sign(
+            {
+              id: getUsuarioDb.id,
+              nome: getUsuarioDb.nome,
+              email: getUsuarioDb.email,
+              tipo: getUsuarioDb.tipo,
+            },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: '365d',
+            }
+          );
+          await prisma.usuario.update({
+            where: { id: getUsuarioDb.id },
+            data: { token: token },
+          });
+          return token;
+        }
+    }catch(error:any){
+      throw new Error(error)
+    }
+  }
+
   async salvar(usuario: Usuario): Promise<Usuario> {
     return prisma.usuario
       .create({
