@@ -25,14 +25,20 @@ router.post('/cadastroAdministrador', async (req, res) => {
   await usuarioController.cadastrarAdministrador(nome, email, cpf, senha, res);
 });
 
-router.post('/autenticaUsuario', async (req, res) => {
+router.post('/autenticaUsuarioAdministrador', async (req, res) => {
   let email = req.body.email;
   let senha = req.body.senha;
 
   let usuarioController = new UsuarioController();
-  let usuario = await usuarioController.autenticaUsuario(email, senha, res);
+  let usuario = await usuarioController.autenticaAdminstrador(email, senha, res);
   // let token = usuario.token;
   // res.status(200).send('Usuário cadastrado com sucesso');
+});
+
+router.post('/autenticaCliente', async (req, res) => {
+  let cpf = req.body.cpf;
+  let usuarioController = new UsuarioController();
+  let usuario = await usuarioController.autenticaCliente(cpf, res);
 });
 
 export default router;

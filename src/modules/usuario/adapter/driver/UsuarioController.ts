@@ -39,10 +39,18 @@ export class UsuarioController {
     }
   }
 
-  async autenticaUsuario(email: string, senha: string, res: any) {
+  async autenticaAdminstrador(email: string, senha: string, res: any) {
     try {
       let usuario = new Usuario('', email, '', '', senha);
-      await new UsuarioService().autenticaUsuario(usuario, res);
+      await new UsuarioService().autenticaAdministrador(usuario, res);
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+  async autenticaCliente(cpf: string, res: any) {
+    try {
+      let usuario = new Usuario('', '', cpf, '');
+      await new UsuarioService().autenticaCliente(usuario, res);
     } catch (error: any) {
       console.log(error);
     }
