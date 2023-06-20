@@ -1,5 +1,5 @@
 import express from 'express';
-import { PodutoController } from '../modules/produto/adapter/driver/ProdutoController';
+import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
 const router = express.Router();
 
@@ -14,10 +14,8 @@ router.post('/cadastroProduto', async (req, res) => {
   let descricao = req.body.descricao;
   let imagem = req.body.imagem;
 
-  // const toString = `nome: ${nome}, categoria: ${categoria}, preço: ${preco}, descrição: ${descricao}, imagem: ${imagem}`;
-  // console.log(toString);
 
-  const produtoController = new PodutoController();
+  const produtoController = new ProdutoController();
   let produtoCadastrado = await produtoController.cadastrarProduto(
     nome,
     categoria,
@@ -30,7 +28,7 @@ router.post('/cadastroProduto', async (req, res) => {
 });
 
 router.get('/exibeProdutos', async (req, res) => {
-  const produtoController = new PodutoController();
+  const produtoController = new ProdutoController();
   let listaDeProdutos = await produtoController.exibirProdutos();
   res.status(200).send(listaDeProdutos);
 });

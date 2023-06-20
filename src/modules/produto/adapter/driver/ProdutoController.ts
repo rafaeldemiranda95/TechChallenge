@@ -1,25 +1,14 @@
-import { ProdutoRepository } from "../driven/infra/ProdutoRepository";
-import { Produto } from "./../../core/domain/Produto";
-
-export class PodutoController {
-  cadastrarProduto(
+import { Produto } from './../../core/domain/Produto';
+import { ProdutoService } from '../../core/applications/services/ProdutoService';
+export class ProdutoController {
+  async cadastrarProduto(
     nome: string,
     categoria: string,
     preco: number,
     descricao: string,
     imagem: string
-  ) {
-    let produto = new Produto(nome, categoria, preco, descricao, imagem);
-    let produtoRepository = new ProdutoRepository();
-    let produtoReturn = produtoRepository.salvar(produto);
-
-    return produtoReturn;
-  }
-  exibirProdutos() {
-    let produtoRepository = new ProdutoRepository();
-    let listaProdutos = produtoRepository.exibirProdutos();
-    return listaProdutos;
-  }
-  alterarProduto() {}
-  apagarProduto() {}
+  ) {}
+  async exibirProdutos() {}
+  async alterarProduto() {}
+  async apagarProduto() {}
 }

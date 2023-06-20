@@ -3,14 +3,14 @@ import { Produto } from "./../../../core/domain/Produto";
 import { IProdutoRepository } from "./../../../core/applications/ports/IProdutoRepository";
 
 export class ProdutoRepository implements IProdutoRepository {
-  async exibirProdutos(): Promise<Produto[]> {
+  async exibirLista(): Promise<Produto[]> {
     const produtos = prisma.produto
       .findMany()
       .then((produtos: any) => produtos);
     return produtos;
   }
 
-  async exibirProdutosPorCategoria(categoria: string): Promise<Produto[]> {
+  async exibirPorCategoria(categoria: string): Promise<Produto[]> {
     const produtos = prisma.produto
       .findMany({
         where: {
@@ -22,7 +22,7 @@ export class ProdutoRepository implements IProdutoRepository {
     return produtos;
   }
 
-  async exibirProdutoPorId(id: number): Promise<Produto> {
+  async exibirPorId(id: number): Promise<Produto> {
     const produto = prisma.produto
       .findUnique({
         where: {
@@ -34,8 +34,9 @@ export class ProdutoRepository implements IProdutoRepository {
     return produto;
   }
 
-  async salvar(produto: Produto): Promise<Produto> {
-    let returnProduto = prisma.produto
+  async salvar(produto: Produto): Promise<Produto | undefined> {
+    try {
+      let returnProduto = prisma.produto
       .create({
         data: {
           nome: produto.nome,
@@ -46,11 +47,16 @@ export class ProdutoRepository implements IProdutoRepository {
         },
       })
       .then((produto: any) => {
-        console.log("produto  ==>>  ", produto);
+        console.log(produto);
         return produto;
+      }).catch((error: any) => {
+        console.log(error);
       });
 
     return returnProduto;
+    } catch (error) {
+      console.log("error  ==>>  ", error);
+    }
   }
 
   async alterar(produto: Produto): Promise<Produto> {
