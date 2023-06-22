@@ -11,12 +11,14 @@ export class Produto {
     categoria: string,
     preco: number,
     descricao: string,
-    imagem: string
+    imagem: string,
+    id?: number
   ) {
     this.nome = nome;
     this.categoria = categoria;
     this.preco = preco;
     this.descricao = descricao;
     this.imagem = imagem;
+    this.id = id;
   }
 }

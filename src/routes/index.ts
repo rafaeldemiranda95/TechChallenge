@@ -14,23 +14,66 @@ router.post('/cadastroProduto', async (req, res) => {
   let descricao = req.body.descricao;
   let imagem = req.body.imagem;
 
-
   const produtoController = new ProdutoController();
   let produtoCadastrado = await produtoController.cadastrarProduto(
     nome,
     categoria,
     preco,
     descricao,
-    imagem
+    imagem,
+    res
   );
-
   res.status(200).send(produtoCadastrado);
 });
 
 router.get('/exibeProdutos', async (req, res) => {
   const produtoController = new ProdutoController();
-  let listaDeProdutos = await produtoController.exibirProdutos();
+  let listaDeProdutos = await produtoController.exibirProdutos(res);
   res.status(200).send(listaDeProdutos);
+});
+
+router.get('/exibeProdutosPorId', async (req, res) => {
+  let id = req.body.id;
+  const produtoController = new ProdutoController();
+  let listaDeProdutos = await produtoController.exibirProdutoPorId(id, res);
+  res.status(200).send(listaDeProdutos);
+});
+
+router.get('/exibeProdutosPorCategoria', async (req, res) => {
+  let categoria = req.body.categoria;
+  const produtoController = new ProdutoController();
+  let listaDeProdutos = await produtoController.exibirProdutoPorCategoria(
+    categoria,
+    res
+  );
+  res.status(200).send(listaDeProdutos);
+});
+
+router.post('/alteraProduto', async (req, res) => {
+  let id = req.body.id;
+  let nome = req.body.nome;
+  let categoria = req.body.categoria;
+  let preco = req.body.preco;
+  let descricao = req.body.descricao;
+  let imagem = req.body.imagem;
+
+  const produtoController = new ProdutoController();
+  let produtoCadastrado = await produtoController.alterarProduto(
+    id,
+    nome,
+    categoria,
+    preco,
+    descricao,
+    imagem,
+    res
+  );
+  res.status(200).send(produtoCadastrado);
+});
+
+router.post('/apagarProduto', async (req, res) => {
+  let id = req.body.id;
+  const produtoController = new ProdutoController();
+  await produtoController.apagarProduto(id, res);
 });
 
 router.post('/cadastroCliente', async (req, res) => {
