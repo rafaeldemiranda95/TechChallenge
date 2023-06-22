@@ -25,11 +25,13 @@ export class UsuarioRepository implements IUsuarioRepository {
     }
   }
   async validarToken(token: string): Promise<boolean | undefined> {
+    console.log(token)
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
         token: token,
       },
     });
+    console.log(getUsuarioDb)
     if (getUsuarioDb) {
       return true;
     } else {

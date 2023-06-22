@@ -1,8 +1,10 @@
 import express from 'express';
 import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
+import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
+import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
 const router = express.Router();
-
+const usuarioService = new UsuarioService();
 router.get('/', (req, res) => {
   res.status(200).send('OK');
 });
@@ -26,7 +28,7 @@ router.post('/cadastroProduto', async (req, res) => {
   res.status(200).send(produtoCadastrado);
 });
 
-router.get('/exibeProdutos', async (req, res) => {
+router.get('/exibeProdutos', autenticacaoMiddleware(usuarioService), async (req, res) => {
   const produtoController = new ProdutoController();
   let listaDeProdutos = await produtoController.exibirProdutos(res);
   res.status(200).send(listaDeProdutos);

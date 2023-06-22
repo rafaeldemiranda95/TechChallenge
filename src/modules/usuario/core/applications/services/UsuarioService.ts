@@ -50,4 +50,14 @@ export class UsuarioService {
       console.log(error);
     }
   }
+
+  async validarToken(token: string) {
+    try {
+      let tokenValido = await new UsuarioRepository().validarToken(token);
+      return tokenValido;
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
 }
