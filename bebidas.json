@@ -1,0 +1,58 @@
+[
+  {
+    "nome": "Coca Cola 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Coca Cola",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Pepsi 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Pepsi",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Fanta 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Fanta",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Guaraná 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Guaraná",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Brahma 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Brahma",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Brahma 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Brahma",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Eisebahn 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Eisebahn",
+    "imagem": "url da imagem virá aqui"
+  },
+  {
+    "nome": "Heineken 500ml",
+    "categoria": "Bebida",
+    "preco": 10.78,
+    "descricao": "Um como de 500 ml de Heineken",
+    "imagem": "url da imagem virá aqui"
+  }
+]
