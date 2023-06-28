@@ -27,17 +27,16 @@ model Usuario {
 }
 
 model Produto {
-  id            Int             @id @default(autoincrement())
-  nome          String
-  categoria     String
-  preco         Float
-  descricao     String
-  imagem        String
-  Pedido        Pedido?         @relation(fields: [pedidoId], references: [id])
-  pedidoId      Int?
-  createdAt     DateTime?       @default(now())
-  updatedAt     DateTime?       @default(now()) @updatedAt
-  PedidoProduto PedidoProduto[]
+  id        Int             @id @default(autoincrement())
+  nome      String
+  categoria String
+  preco     Float
+  descricao String
+  imagem    String
+  pedidoId  Int?
+  createdAt DateTime?       @default(now())
+  updatedAt DateTime?       @default(now()) @updatedAt
+  pedidos   PedidoProduto[]
 }
 
 model Pedido {
@@ -50,7 +49,6 @@ model Pedido {
   tempoEspera Int
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-  Produto     Produto[]
   Pagamento   Pagamento?
   Fila        Fila?
 }

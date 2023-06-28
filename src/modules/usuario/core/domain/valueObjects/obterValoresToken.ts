@@ -3,12 +3,12 @@ import { Usuario } from '../models/Usuario';
 const jwt = require('jsonwebtoken');
 
 export class obterValoresToken {
-    private readonly usuario: Usuario;
-  constructor(token: string) {
-   this.usuario= this.obterInformacoesToken(token);
-  }
+  // private readonly usuario: Usuario;
+  // constructor(token: string) {
+  //   this.usuario = this.obterInformacoesToken(token);
+  // }
 
-  private obterInformacoesToken(token: string): Usuario {
+  public obterInformacoesToken(token: string): Usuario {
     let informacoes = jwt.verify(token, process.env.JWT_SECRET);
     if (informacoes) {
       let usuario = new Usuario(

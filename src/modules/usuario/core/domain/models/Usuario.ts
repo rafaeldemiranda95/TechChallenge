@@ -5,6 +5,7 @@ export class Usuario {
   tipo?: string;
   senha?: string;
   token?: string;
+  id?: number;
 
   constructor(
     nome: string,
@@ -12,7 +13,8 @@ export class Usuario {
     cpf: string,
     tipo?: string,
     senha?: string,
-    token?: string
+    token?: string,
+    id?: number
   ) {
     this.nome = nome;
     this.email = email;
@@ -20,5 +22,6 @@ export class Usuario {
     this.tipo = tipo;
     this.senha = senha;
     this.token = token;
+    this.id = id;
   }
 }

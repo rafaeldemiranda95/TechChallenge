@@ -145,11 +145,11 @@ router.post('/autenticaCliente', async (req, res) => {
 
 router.post('/enviarPedido', async (req, res) => {
   let token = req.headers.authorization;
-  let produtos = req.body.produtos;
+  let produto = req.body.produtos;
   let tempoEspera = req.body.tempoEspera;
 
   let pedidoController = new PedidoController();
-  await pedidoController.enviarPedido(token, produtos, tempoEspera, res);
+  await pedidoController.enviarPedido(token, produto, tempoEspera, res);
   res.status(200).send('Pedido enviado com sucesso!');
 
 });

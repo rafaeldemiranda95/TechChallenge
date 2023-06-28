@@ -7,12 +7,13 @@ import { obterValoresToken } from '../../../usuario/core/domain/valueObjects/obt
 export class PedidoController {
   async enviarPedido(
     token: any,
-    produtos: Array<Produto>,
+    produto: Array<Produto>,
     tempoEspera: number,
     res: Response
   ) {
-    let usuario: any = new obterValoresToken(token);
-    let pedido: Pedido = new Pedido(usuario, produtos, tempoEspera);
+    let valores = new obterValoresToken();
+    let usuario: any = valores.obterInformacoesToken(token);
+    let pedido: Pedido = new Pedido(usuario, produto, tempoEspera);
     await new PedidoService().enviarPedido(pedido);
   }
 }
