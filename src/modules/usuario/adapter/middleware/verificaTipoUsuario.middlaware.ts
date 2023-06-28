@@ -7,11 +7,7 @@ export function verificaTipoUsuario(usuarioService: UsuarioService){
             return res.status(401).json({error: "Token de autenticação não fornecido."})
         }
         const estaAutenticado = await usuarioService.verificaTipoUsuario(token);
-        // if(!estaAutenticado){
-        //     return res.status(401).json({error: "Token inválido."})
-        // }else{
-        //     next();
-        // }
+
         next();
     }
 

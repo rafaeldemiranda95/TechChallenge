@@ -1,4 +1,4 @@
-import { Produto } from "../../domain/Produto";
+import { Produto } from "../../domain/models/Produto";
 export interface IProdutoRepository {
   salvar(produto: Produto): Promise<Produto | undefined>;
   exibirLista(): Promise<Produto[]>;

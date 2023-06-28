@@ -11,21 +11,82 @@ datasource db {
 }
 
 model Usuario {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
   nome      String
-  cpf       String  @unique
-  tipo      String  @default("cliente")
+  cpf       String      @unique
+  tipo      String      @default("cliente")
   senha     String?
-  token     String? @unique
+  token     String?     @unique
   categoria String?
+  createdAt DateTime?   @default(now())
+  updatedAt DateTime?   @default(now()) @updatedAt
+  Pedido    Pedido[]
+  Pagamento Pagamento[]
+  Fila      Fila[]
 }
 
 model Produto {
-  id        Int    @id @default(autoincrement())
-  nome      String
-  categoria String
-  preco     Float
-  descricao String
-  imagem    String
+  id            Int             @id @default(autoincrement())
+  nome          String
+  categoria     String
+  preco         Float
+  descricao     String
+  imagem        String
+  Pedido        Pedido?         @relation(fields: [pedidoId], references: [id])
+  pedidoId      Int?
+  createdAt     DateTime?       @default(now())
+  updatedAt     DateTime?       @default(now()) @updatedAt
+  PedidoProduto PedidoProduto[]
+}
+
+model Pedido {
+  id          Int             @id @default(autoincrement())
+  usuario     Usuario?        @relation(fields: [usuarioId], references: [id])
+  usuarioId   Int?
+  produtos    PedidoProduto[]
+  status      String          @default("pendente")
+  total       Float
+  tempoEspera Int
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  Produto     Produto[]
+  Pagamento   Pagamento?
+  Fila        Fila?
+}
+
+model PedidoProduto {
+  pedido     Pedido  @relation(fields: [pedidoId], references: [id])
+  pedidoId   Int
+  produto    Produto @relation(fields: [produtoId], references: [id])
+  produtoId  Int
+  quantidade Int
+
+  @@id([pedidoId, produtoId])
+}
+
+model Pagamento {
+  id        Int      @id @default(autoincrement())
+  pedido    Pedido   @relation(fields: [pedidoId], references: [id])
+  pedidoId  Int      @unique
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+  usuarioId Int?
+  valor     Float
+  status    String
+  data      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Fila {
+  id        Int      @id @default(autoincrement())
+  pedido    Pedido   @relation(fields: [pedidoId], references: [id])
+  pedidoId  Int      @unique
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+  usuarioId Int?
+  valor     Float
+  status    String
+  data      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

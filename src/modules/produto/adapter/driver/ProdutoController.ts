@@ -1,4 +1,4 @@
-import { Produto } from './../../core/domain/Produto';
+import { Produto } from '../../core/domain/models/Produto';
 import { ProdutoService } from '../../core/applications/services/ProdutoService';
 export class ProdutoController {
   async cadastrarProduto(

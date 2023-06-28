@@ -4,10 +4,10 @@ export class CPF {
     public readonly value: boolean;
   
     constructor(value: string) {
-        this.value = this.isValidCPF(value);
+        this.value = this.validaCPF(value);
     }
   
-    private isValidCPF(value: string): boolean {
+    private validaCPF(value: string): boolean {
         return cpf.isValid(value);
     }
   }
