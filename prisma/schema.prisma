@@ -35,7 +35,6 @@ model Produto {
 
 model Pedido {
   id          Int       @id @default(autoincrement())
-  // usuario     Usuario?   @relation(fields: [usuarioId], references: [id])
   usuarioId   Int?
   status      String    @default("pendente")
   total       Float

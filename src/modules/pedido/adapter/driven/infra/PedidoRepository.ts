@@ -4,8 +4,49 @@ import { prisma } from '../../../../../config/database';
 import { Usuario } from '../../../../usuario/core/domain/models/Usuario';
 import { Produto } from '../../../../produto/core/domain/models/Produto';
 import { PedidoProduto } from '../../../core/domain/models/PedidoProduto';
+import { Fila } from '../../../core/domain/models/Fila';
 import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
 export class PedidoRepository implements IPedidoRepository {
+  async listagemFilas(): Promise<any> {
+    try {
+      let listaFila = await prisma.fila.findMany();
+      return listaFila;
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
+  async trocarStatusFila(id: number, status: string): Promise<void> {
+    // recebido
+    // em preparação
+    // pronto
+    // finalizado
+
+    try {
+      await prisma.fila.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: status,
+        },
+      });
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
+  async enviarParaFila(pedido: Pedido): Promise<void> {
+    try {
+      await prisma.fila.create({
+        data: {
+          pedidoId: pedido.id ? pedido.id : 0,
+          status: pedido.status,
+          usuarioId: pedido.usuario.id,
+        },
+      });
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
   async listar() {
     try {
       let pedidos = await prisma.pedido.findMany();
@@ -59,6 +100,9 @@ export class PedidoRepository implements IPedidoRepository {
           });
         }
       }
+
+      pedido.id = pedidoInsert.id;
+      await this.enviarParaFila(pedido);
     } catch (error: any) {
       console.log(error);
     }
