@@ -9,11 +9,18 @@ export class PedidoController {
     token: any,
     produto: Array<Produto>,
     tempoEspera: number,
+    total: number,
     res: Response
   ) {
     let valores = new obterValoresToken();
     let usuario: any = valores.obterInformacoesToken(token);
-    let pedido: Pedido = new Pedido(usuario, produto, tempoEspera);
+    console.log(usuario)
+    let pedido: Pedido = new Pedido(usuario, produto, tempoEspera, total);
     await new PedidoService().enviarPedido(pedido);
+  }
+
+  async listaPedidos(res: Response) {
+    let pedidos = await new PedidoService().listarPedidos();
+    res.status(200).send(pedidos);
   }
 }

@@ -11,80 +11,83 @@ datasource db {
 }
 
 model Usuario {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   nome      String
-  cpf       String      @unique
-  tipo      String      @default("cliente")
+  cpf       String    @unique
+  tipo      String    @default("cliente")
   senha     String?
-  token     String?     @unique
+  token     String?   @unique
   categoria String?
-  createdAt DateTime?   @default(now())
-  updatedAt DateTime?   @default(now()) @updatedAt
-  Pedido    Pedido[]
-  Pagamento Pagamento[]
-  Fila      Fila[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+  // Pedido    Pedido[]
+  // Pagamento Pagamento[]
+  // Fila      Fila[]
 }
 
 model Produto {
-  id        Int             @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
   categoria String
   preco     Float
   descricao String
   imagem    String
   pedidoId  Int?
-  createdAt DateTime?       @default(now())
-  updatedAt DateTime?       @default(now()) @updatedAt
-  pedidos   PedidoProduto[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+  Pedido    Pedido?   @relation(fields: [pedidoId], references: [id])
 }
 
 model Pedido {
-  id          Int             @id @default(autoincrement())
-  usuario     Usuario?        @relation(fields: [usuarioId], references: [id])
+  id          Int       @id @default(autoincrement())
+  // usuario     Usuario?   @relation(fields: [usuarioId], references: [id])
   usuarioId   Int?
-  produtos    PedidoProduto[]
-  status      String          @default("pendente")
+  status      String    @default("pendente")
   total       Float
   tempoEspera Int
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  Pagamento   Pagamento?
-  Fila        Fila?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  // Pagamento   Pagamento? @relation(fields: [pagamentoId], references: [id])
+  // Fila        Fila?      @relation(fields: [filaId], references: [id])
+  // Usuario     Usuario?   @relation(fields: [usuarioId], references: [id])
+  pagamentoId Int?
+  filaId      Int?
+  // Pagamento   Pagamento? @relation(fields: [pagamentoId], references: [id])
+  Produto     Produto[]
 }
 
 model PedidoProduto {
-  pedido     Pedido  @relation(fields: [pedidoId], references: [id])
   pedidoId   Int
-  produto    Produto @relation(fields: [produtoId], references: [id])
   produtoId  Int
   quantidade Int
-
-  @@id([pedidoId, produtoId])
+  id         Int @id @default(autoincrement())
 }
 
 model Pagamento {
   id        Int      @id @default(autoincrement())
-  pedido    Pedido   @relation(fields: [pedidoId], references: [id])
+  // pedido    Pedido   @relation(fields: [pedidoId], references: [id])
   pedidoId  Int      @unique
-  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+  // usuario   Usuario? @relation(fields: [usuarioId], references: [id])
   usuarioId Int?
   valor     Float
   status    String
   data      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // Pedido    Pedido[]
 }
 
 model Fila {
   id        Int      @id @default(autoincrement())
-  pedido    Pedido   @relation(fields: [pedidoId], references: [id])
+  // pedido    Pedido   @relation(fields: [pedidoId], references: [id])
   pedidoId  Int      @unique
-  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+  // usuario   Usuario? @relation(fields: [usuarioId], references: [id])
   usuarioId Int?
   valor     Float
   status    String
   data      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // Pedido    Pedido[]
 }

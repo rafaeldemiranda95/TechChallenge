@@ -147,13 +147,16 @@ router.post('/enviarPedido', async (req, res) => {
   let token = req.headers.authorization;
   let produto = req.body.produtos;
   let tempoEspera = req.body.tempoEspera;
+  let total = req.body.total;
 
   let pedidoController = new PedidoController();
-  await pedidoController.enviarPedido(token, produto, tempoEspera, res);
+  await pedidoController.enviarPedido(token, produto, tempoEspera, total, res);
   res.status(200).send('Pedido enviado com sucesso!');
-
 });
 
-router.post('/listaPedidos', async (req, res) => {});
+router.get('/listarPedidos', async (req, res) => {
+  let pedidoController = new PedidoController();
+  await pedidoController.listaPedidos(res);
+});
 
 export default router;

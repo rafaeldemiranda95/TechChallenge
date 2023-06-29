@@ -4,4 +4,8 @@ export class PedidoService {
   async enviarPedido(pedido:Pedido) {
     await new PedidoRepository().salvar(pedido);
   }
+
+  async listarPedidos(): Promise<any> {
+    return await new PedidoRepository().listar();
+  }
 }
