@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,9 +18,6 @@ model Usuario {
   categoria String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
-  // Pedido    Pedido[]
-  // Pagamento Pagamento[]
-  // Fila      Fila[]
 }
 
 model Produto {
@@ -48,12 +42,8 @@ model Pedido {
   tempoEspera Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  // Pagamento   Pagamento? @relation(fields: [pagamentoId], references: [id])
-  // Fila        Fila?      @relation(fields: [filaId], references: [id])
-  // Usuario     Usuario?   @relation(fields: [usuarioId], references: [id])
   pagamentoId Int?
   filaId      Int?
-  // Pagamento   Pagamento? @relation(fields: [pagamentoId], references: [id])
   Produto     Produto[]
 }
 
@@ -66,28 +56,21 @@ model PedidoProduto {
 
 model Pagamento {
   id        Int      @id @default(autoincrement())
-  // pedido    Pedido   @relation(fields: [pedidoId], references: [id])
   pedidoId  Int      @unique
-  // usuario   Usuario? @relation(fields: [usuarioId], references: [id])
   usuarioId Int?
   valor     Float
   status    String
   data      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // Pedido    Pedido[]
 }
 
 model Fila {
   id        Int      @id @default(autoincrement())
-  // pedido    Pedido   @relation(fields: [pedidoId], references: [id])
   pedidoId  Int      @unique
-  // usuario   Usuario? @relation(fields: [usuarioId], references: [id])
   usuarioId Int?
-  valor     Float
   status    String
   data      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // Pedido    Pedido[]
 }
