@@ -3,6 +3,7 @@ import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoCont
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
 import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
 import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
+import { PedidoController } from '../modules/pedido/adapter/driver/PedidoController';
 import { verificaTipoUsuario } from '../modules/usuario/adapter/middleware/verificaTipoUsuario.middlaware';
 const router = express.Router();
 const usuarioService = new UsuarioService();
@@ -99,17 +100,14 @@ router.post(
   }
 );
 
-router.post(
-  '/cadastroCliente',
-  async (req, res) => {
-    let nome = req.body.nome;
-    let email = req.body.email;
-    let cpf = req.body.cpf;
+router.post('/cadastroCliente', async (req, res) => {
+  let nome = req.body.nome;
+  let email = req.body.email;
+  let cpf = req.body.cpf;
 
-    let usuarioController = new UsuarioController();
-    await usuarioController.cadastrarCliente(nome, email, cpf, res);
-  }
-);
+  let usuarioController = new UsuarioController();
+  await usuarioController.cadastrarCliente(nome, email, cpf, res);
+});
 
 router.post(
   '/cadastroAdministrador',
@@ -143,6 +141,34 @@ router.post('/autenticaCliente', async (req, res) => {
   let cpf = req.body.cpf;
   let usuarioController = new UsuarioController();
   await usuarioController.autenticaCliente(cpf, res);
+});
+
+router.post('/enviarPedido', async (req, res) => {
+  let token = req.headers.authorization;
+  let produto = req.body.produtos;
+  let tempoEspera = req.body.tempoEspera;
+  let total = req.body.total;
+
+  let pedidoController = new PedidoController();
+  await pedidoController.enviarPedido(token, produto, tempoEspera, total, res);
+  res.status(200).send('Pedido enviado com sucesso!');
+});
+
+router.get('/listarPedidos', async (req, res) => {
+  let pedidoController = new PedidoController();
+  await pedidoController.listaPedidos(res);
+});
+
+router.get('/listarFilas', async (req, res) => {
+  let pedidoController = new PedidoController();
+  await pedidoController.listaFilas(res);
+});
+
+router.post('/trocarStatusFila', async (req, res) => {
+  let id = req.body.id;
+  let status = req.body.status;
+  let pedidoController = new PedidoController();
+  await pedidoController.trocarStatusFila(id, status, res);
 });
 
 export default router;

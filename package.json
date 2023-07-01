@@ -1,6 +1,9 @@
 {
   "name": "techchallenge",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "description": "",
   "main": "index.js",
   "directories": {
@@ -15,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^4.16.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cpf-cnpj-validator": "^1.0.3",
@@ -27,7 +30,7 @@
     "@types/express": "^4.17.17",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
-    "prisma": "^4.15.0",
+    "prisma": "^4.16.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }

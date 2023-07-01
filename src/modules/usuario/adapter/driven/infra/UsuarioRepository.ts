@@ -24,6 +24,7 @@ export class UsuarioRepository implements IUsuarioRepository {
       return undefined;
     }
   }
+  
   async validarToken(token: string): Promise<boolean | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
@@ -36,6 +37,7 @@ export class UsuarioRepository implements IUsuarioRepository {
       return false;
     }
   }
+
   async autenticaAdministrador(usuario: Usuario): Promise<string | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
@@ -86,6 +88,7 @@ export class UsuarioRepository implements IUsuarioRepository {
               nome: getUsuarioDb.nome,
               email: getUsuarioDb.email,
               tipo: getUsuarioDb.tipo,
+              cpf: getUsuarioDb.cpf,
             },
             process.env.JWT_SECRET,
             {

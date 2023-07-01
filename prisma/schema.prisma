@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,21 +8,68 @@ datasource db {
 }
 
 model Usuario {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   nome      String
-  cpf       String  @unique
-  tipo      String  @default("cliente")
+  cpf       String    @unique
+  tipo      String    @default("cliente")
   senha     String?
-  token     String? @unique
+  token     String?   @unique
   categoria String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
 }
 
 model Produto {
-  id        Int    @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
   categoria String
   preco     Float
   descricao String
   imagem    String
+  pedidoId  Int?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+  Pedido    Pedido?   @relation(fields: [pedidoId], references: [id])
+}
+
+model Pedido {
+  id          Int       @id @default(autoincrement())
+  usuarioId   Int?
+  status      String    @default("pendente")
+  total       Float
+  tempoEspera Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  pagamentoId Int?
+  filaId      Int?
+  Produto     Produto[]
+}
+
+model PedidoProduto {
+  pedidoId   Int
+  produtoId  Int
+  quantidade Int
+  id         Int @id @default(autoincrement())
+}
+
+model Pagamento {
+  id        Int      @id @default(autoincrement())
+  pedidoId  Int      @unique
+  usuarioId Int?
+  valor     Float
+  status    String
+  data      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Fila {
+  id        Int      @id @default(autoincrement())
+  pedidoId  Int      @unique
+  usuarioId Int?
+  status    String
+  data      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -61,8 +61,8 @@ export class UsuarioService {
       console.log(error);
     }
   }
+
   async verificaTipoUsuario(token: string) {
-    //necessita pegar o tipo de usuário no token fornecido
     bcrypt.compare(token.includes("administrador"), token, function (err: any, result: any) {
       console.log(result)
     });

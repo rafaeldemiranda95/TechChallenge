@@ -1,5 +1,5 @@
 import { prisma } from "./../../../../../config/database";
-import { Produto } from "./../../../core/domain/Produto";
+import { Produto } from "../../../core/domain/models/Produto";
 import { IProdutoRepository } from "./../../../core/applications/ports/IProdutoRepository";
 
 export class ProdutoRepository implements IProdutoRepository {
