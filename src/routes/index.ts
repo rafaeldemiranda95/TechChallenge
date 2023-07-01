@@ -11,24 +11,28 @@ router.get('/', (req, res) => {
   res.status(200).send('OK');
 });
 
-router.post('/cadastroProduto', async (req, res) => {
-  let nome = req.body.nome;
-  let categoria = req.body.categoria;
-  let preco = req.body.preco;
-  let descricao = req.body.descricao;
-  let imagem = req.body.imagem;
+router.post(
+  '/cadastroProduto',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let nome = req.body.nome;
+    let categoria = req.body.categoria;
+    let preco = req.body.preco;
+    let descricao = req.body.descricao;
+    let imagem = req.body.imagem;
 
-  const produtoController = new ProdutoController();
-  let produtoCadastrado = await produtoController.cadastrarProduto(
-    nome,
-    categoria,
-    preco,
-    descricao,
-    imagem,
-    res
-  );
-  res.status(200).send(produtoCadastrado);
-});
+    const produtoController = new ProdutoController();
+    let produtoCadastrado = await produtoController.cadastrarProduto(
+      nome,
+      categoria,
+      preco,
+      descricao,
+      imagem,
+      res
+    );
+    res.status(200).send(produtoCadastrado);
+  }
+);
 
 router.get(
   '/exibeProdutos',
@@ -154,21 +158,33 @@ router.post('/enviarPedido', async (req, res) => {
   res.status(200).send('Pedido enviado com sucesso!');
 });
 
-router.get('/listarPedidos', async (req, res) => {
-  let pedidoController = new PedidoController();
-  await pedidoController.listaPedidos(res);
-});
+router.get(
+  '/listarPedidos',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let pedidoController = new PedidoController();
+    await pedidoController.listaPedidos(res);
+  }
+);
 
-router.get('/listarFilas', async (req, res) => {
-  let pedidoController = new PedidoController();
-  await pedidoController.listaFilas(res);
-});
+router.get(
+  '/listarFilas',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let pedidoController = new PedidoController();
+    await pedidoController.listaFilas(res);
+  }
+);
 
-router.post('/trocarStatusFila', async (req, res) => {
-  let id = req.body.id;
-  let status = req.body.status;
-  let pedidoController = new PedidoController();
-  await pedidoController.trocarStatusFila(id, status, res);
-});
+router.post(
+  '/trocarStatusFila',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let id = req.body.id;
+    let status = req.body.status;
+    let pedidoController = new PedidoController();
+    await pedidoController.trocarStatusFila(id, status, res);
+  }
+);
 
 export default router;

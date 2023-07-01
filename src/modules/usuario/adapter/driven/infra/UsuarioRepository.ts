@@ -5,6 +5,25 @@ const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
 export class UsuarioRepository implements IUsuarioRepository {
+  async obterUsuarioPorId(id: number): Promise<Usuario | undefined> {
+    try {
+      let usuario = await prisma.usuario.findUnique({
+        where: { id: id },
+      });
+      if (usuario) {
+        return new Usuario(
+          usuario.nome,
+          usuario.email,
+          usuario.cpf,
+          usuario.tipo,
+        );
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async renovarToken(token: string): Promise<string | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
@@ -24,7 +43,7 @@ export class UsuarioRepository implements IUsuarioRepository {
       return undefined;
     }
   }
-  
+
   async validarToken(token: string): Promise<boolean | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
@@ -82,27 +101,27 @@ export class UsuarioRepository implements IUsuarioRepository {
         },
       });
       if (getUsuarioDb) {
-          let token = jwt.sign(
-            {
-              id: getUsuarioDb.id,
-              nome: getUsuarioDb.nome,
-              email: getUsuarioDb.email,
-              tipo: getUsuarioDb.tipo,
-              cpf: getUsuarioDb.cpf,
-            },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: '365d',
-            }
-          );
-          await prisma.usuario.update({
-            where: { id: getUsuarioDb.id },
-            data: { token: token },
-          });
-          return token;
-        }
-    }catch(error:any){
-      throw new Error(error)
+        let token = jwt.sign(
+          {
+            id: getUsuarioDb.id,
+            nome: getUsuarioDb.nome,
+            email: getUsuarioDb.email,
+            tipo: getUsuarioDb.tipo,
+            cpf: getUsuarioDb.cpf,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: '365d',
+          }
+        );
+        await prisma.usuario.update({
+          where: { id: getUsuarioDb.id },
+          data: { token: token },
+        });
+        return token;
+      }
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 

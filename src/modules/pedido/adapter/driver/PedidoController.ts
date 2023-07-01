@@ -14,7 +14,10 @@ export class PedidoController {
   ) {
     let valores = new obterValoresToken();
     let usuario: any = valores.obterInformacoesToken(token);
-    console.log(usuario);
+    if(usuario == undefined){
+      res.status(401).send('Token inválido!');
+      return;
+    }
     let pedido: Pedido = new Pedido(usuario, produto, tempoEspera, total);
     await new PedidoService().enviarPedido(pedido);
   }

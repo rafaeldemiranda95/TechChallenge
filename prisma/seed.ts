@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+const bcrypt = require('bcrypt');
+
 async function main() {
   const bebidas = await prisma.produto.createMany({
     data: [
@@ -305,6 +307,25 @@ async function main() {
       },
     ],
     skipDuplicates: true,
+  });
+
+  const usuarios = await prisma.usuario.createMany({
+    data: [
+      {
+        nome: 'Rafael',
+        email: 'rafael@gmail.com',
+        senha: bcrypt.hashSync('123456', 10),
+        cpf: '40615931022',
+        tipo: 'ADMININSTRADOR',
+      },
+      {
+        nome: 'Airton',
+        email: 'airton@gmail.com',
+        senha: bcrypt.hashSync('123456', 10),
+        cpf: '72721499068',
+        tipo: 'CLIENTE',
+      },
+    ],
   });
 }
 

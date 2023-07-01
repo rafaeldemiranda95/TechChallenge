@@ -12,10 +12,9 @@ model Usuario {
   email     String    @unique
   nome      String
   cpf       String    @unique
-  tipo      String    @default("cliente")
+  tipo      String    @default("CLIENTE")
   senha     String?
   token     String?   @unique
-  categoria String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
 }
