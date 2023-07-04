@@ -147,16 +147,26 @@ router.post('/autenticaCliente', async (req, res) => {
   await usuarioController.autenticaCliente(cpf, res);
 });
 
-router.post('/enviarPedido', async (req, res) => {
-  let token = req.headers.authorization;
-  let produto = req.body.produtos;
-  let tempoEspera = req.body.tempoEspera;
-  let total = req.body.total;
+router.post(
+  '/enviarPedido',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let token = req.headers.authorization;
+    let produto = req.body.produtos;
+    let tempoEspera = req.body.tempoEspera;
+    let total = req.body.total;
 
-  let pedidoController = new PedidoController();
-  await pedidoController.enviarPedido(token, produto, tempoEspera, total, res);
-  res.status(200).send('Pedido enviado com sucesso!');
-});
+    let pedidoController = new PedidoController();
+    await pedidoController.enviarPedido(
+      token,
+      produto,
+      tempoEspera,
+      total,
+      res
+    );
+    res.status(200).send('Pedido enviado com sucesso!');
+  }
+);
 
 router.get(
   '/listarPedidos',
