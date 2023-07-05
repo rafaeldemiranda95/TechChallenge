@@ -4,13 +4,15 @@
 
 **Grupo 21**
 
-349463 - Airton Patrocínio da SIlva Juior;
-Rafael de Miranda;
+349463 - Airton Patrocínio da SIlva Juior
+
+Rafael de Miranda
 
 ## Links:
 
-[Link Miro](https://miro.com/welcomeonboard/cFBKa2FvMmk2aUlFdmJUMVkzV09mYXFSMjY4TFMyNU9HRUxoZnhCOVJlckROTFlGVzNaR081aGVhRzg4QVZLeXwzNDU4NzY0NTU0ODI1ODY4Mzg3fDI=?share_link_id=476610680949);
-[Link gitHub](https://github.com/rafaeldemiranda95/TechChallenge);
+[Link Miro](https://miro.com/welcomeonboard/cFBKa2FvMmk2aUlFdmJUMVkzV09mYXFSMjY4TFMyNU9HRUxoZnhCOVJlckROTFlGVzNaR081aGVhRzg4QVZLeXwzNDU4NzY0NTU0ODI1ODY4Mzg3fDI=?share_link_id=476610680949)
+
+[Link gitHub](https://github.com/rafaeldemiranda95/TechChallenge)
 
 ## APi
 
