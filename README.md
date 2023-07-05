@@ -2,15 +2,17 @@
 
 ## TURMA 2SOAT
 
-**Grupo 21**
-349463 - Airton Patrocínio da SIlva Juior
+**Grupo 21.**
 
-- Rafael de Miranda
+349463 - Airton Patrocínio da SIlva Juior.
+
+Rafael de Miranda
 
 ## Links:
 
-[Miro](https://miro.com/welcomeonboard/cFBKa2FvMmk2aUlFdmJUMVkzV09mYXFSMjY4TFMyNU9HRUxoZnhCOVJlckROTFlGVzNaR081aGVhRzg4QVZLeXwzNDU4NzY0NTU0ODI1ODY4Mzg3fDI=?share_link_id=476610680949)
-[gitHub](https://github.com/rafaeldemiranda95/TechChallenge)
+[Miro](https://miro.com/welcomeonboard/cFBKa2FvMmk2aUlFdmJUMVkzV09mYXFSMjY4TFMyNU9HRUxoZnhCOVJlckROTFlGVzNaR081aGVhRzg4QVZLeXwzNDU4NzY0NTU0ODI1ODY4Mzg3fDI=?share_link_id=476610680949).
+
+[gitHub](https://github.com/rafaeldemiranda95/TechChallenge).
 
 ## APi
 
