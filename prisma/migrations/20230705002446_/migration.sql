@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Produto" ALTER COLUMN "tempoPreparo" SET DATA TYPE DOUBLE PRECISION;

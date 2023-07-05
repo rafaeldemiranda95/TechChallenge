@@ -5,6 +5,7 @@ export class Produto {
   preco: number;
   descricao: string;
   imagem: string;
+  tempoPreparo?: number;
   quantidade?: number;
 
   constructor(
@@ -13,6 +14,7 @@ export class Produto {
     preco: number,
     descricao: string,
     imagem: string,
+    tempoPreparo?: number,
     id?: number,
     quantidade?: number
   ) {
@@ -23,5 +25,6 @@ export class Produto {
     this.imagem = imagem;
     this.id = id;
     this.quantidade = quantidade;
+    this.tempoPreparo = tempoPreparo;
   }
 }

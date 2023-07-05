@@ -20,24 +20,25 @@ model Usuario {
 }
 
 model Produto {
-  id        Int       @id @default(autoincrement())
-  nome      String
-  categoria String
-  preco     Float
-  descricao String
-  imagem    String
-  pedidoId  Int?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now()) @updatedAt
-  Pedido    Pedido?   @relation(fields: [pedidoId], references: [id])
+  id           Int       @id @default(autoincrement())
+  nome         String
+  categoria    String
+  preco        Float
+  descricao    String
+  imagem       String
+  tempoPreparo Float?    @default(0)
+  pedidoId     Int?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now()) @updatedAt
+  Pedido       Pedido?   @relation(fields: [pedidoId], references: [id])
 }
 
 model Pedido {
   id          Int       @id @default(autoincrement())
   usuarioId   Int?
   status      String    @default("pendente")
-  total       Float
-  tempoEspera Int
+  total       Float?
+  tempoEspera Float?    @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   pagamentoId Int?

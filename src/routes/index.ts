@@ -5,6 +5,7 @@ import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/au
 import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
 import { PedidoController } from '../modules/pedido/adapter/driver/PedidoController';
 import { verificaTipoUsuario } from '../modules/usuario/adapter/middleware/verificaTipoUsuario.middlaware';
+import { ItensPedido } from '../modules/pedido/core/domain/models/ItensPedido';
 const router = express.Router();
 const usuarioService = new UsuarioService();
 router.get('/', (req, res) => {
@@ -152,18 +153,10 @@ router.post(
   autenticacaoMiddleware(usuarioService),
   async (req, res) => {
     let token = req.headers.authorization;
-    let produto = req.body.produtos;
-    let tempoEspera = req.body.tempoEspera;
-    let total = req.body.total;
+    let produto: Array<ItensPedido> = req.body.produtos;
 
     let pedidoController = new PedidoController();
-    await pedidoController.enviarPedido(
-      token,
-      produto,
-      tempoEspera,
-      total,
-      res
-    );
+    await pedidoController.enviarPedido(token, produto, res);
     res.status(200).send('Pedido enviado com sucesso!');
   }
 );
