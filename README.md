@@ -4,7 +4,7 @@
 
 **Grupo 21**
 
-349463 - Airton Patrocínio da SIlva Juior
+349463 - Airton Patrocínio da Silva Junior
 
 349308 - Rafael de Miranda
 
