@@ -17,7 +17,7 @@
 - Produtos
   | URL | Parametros |
   |---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-  | http://localhost:3000/cadastroProduto | ''' {"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"} ''' |
+  | http://localhost:3000/cadastroProduto | ```{"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"}``` |
 
   <!-- - http://localhost:3000/cadastroProduto
     ... {"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"} ... -->
