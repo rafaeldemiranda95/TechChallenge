@@ -14,7 +14,7 @@
 
 [Link gitHub](https://github.com/rafaeldemiranda95/TechChallenge)
 
-## APi
+## API
 
 - Produtos
   | Método | URL | Exemplo de Parâmetros |
@@ -39,4 +39,5 @@
   |--------|-----|------------|
   | POST | http://localhost:8000/enviarPedido | `{"produtos":[{"id":9,"quantidade":2},{"id":1,"quantidade":1},{"id":8,"quantidade":2},{"id":30,"quantidade":1},{"id":20,"quantidade":1}]}` |
   | POST | http://localhost:3000/trocarStatusFila | `{"id":11,"status":"Finalizado"}` |
+  | GET | http://localhost:3000/listarPedidos | |
   | GET | http://localhost:3000/listarFilas | |
