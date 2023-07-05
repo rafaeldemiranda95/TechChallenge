@@ -15,9 +15,14 @@
 ## APi
 
 - Produtos
-  | URL | Parametros |
-  |---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-  | http://localhost:3000/cadastroProduto | ```{"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"}``` |
+  | Metodo | URL | Parametros |
+  |--------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | POST | http://localhost:3000/cadastroProduto | `{"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"}` |
+  | POST | http://localhost:3000/alteraProduto | `{"id": 4,"nome":"Coca Cola refil","categoria": "Bebida","preco":10.78,"descricao": "Um como de 500 ml de Coca Cola uqe você pode recarregar quantas vezes quiser","imagem": "url da imagem virá aqui"}` |
+  | POST | http://localhost:3000/apagarProduto | `{"id": 5}` |
+  | GET | http://localhost:3000/exibeProdutos | |
+  | GET | http://localhost:3000/exibeProdutosPorId | |
+  | GET | http://localhost:3000/exibeProdutosPorCategoria | |
 
   <!-- - http://localhost:3000/cadastroProduto
     ... {"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"} ... -->
