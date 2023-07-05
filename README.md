@@ -17,7 +17,7 @@ Rafael de Miranda
 ## APi
 
 - Produtos
-  | Metodo | URL | Parametros |
+  | Metodo | URL | Exemplo de Parametros |
   |--------|-----|------------|
   | POST | http://localhost:3000/cadastroProduto | `{"nome":"Água 500ml","categoria": "Bebida","preco":2.55,"descricao": "Uma garrafa de água mineral sem gás","imagem": "url da imagem virá aqui"}` |
   | POST | http://localhost:3000/alteraProduto | `{"id": 4,"nome":"Coca Cola refil","categoria": "Bebida","preco":10.78,"descricao": "Um como de 500 ml de Coca Cola uqe você pode recarregar quantas vezes quiser","imagem": "url da imagem virá aqui"}` |
@@ -27,7 +27,7 @@ Rafael de Miranda
   | GET | http://localhost:3000/exibeProdutosPorCategoria | |
 
 - Usuário
-  | Metodo | URL | Parametros |
+  | Metodo | URL | Exemplo de Parametros |
   |--------|-----|------------|
   | POST | http://localhost:3000/cadastroCliente | `{"nome":"Rafael de Miranda","email":"3434@gmail.com","cpf":"96509759004"}` |
   | POST | http://localhost:3000/cadastroAdministrador | `{"nome":"Rafael de Miranda","email":"434343133332321@gmail.com","cpf":"51697242090","senha":"123456","tipo":"adminstrador"}` |
@@ -35,7 +35,7 @@ Rafael de Miranda
   | POST | http://localhost:3000/autenticaCliente | `{"cpf":"50651193095"}` |
 
 - Prdido
-  | Metodo | URL | Parametros |
+  | Metodo | URL | Exemplo de Parametros |
   |--------|-----|------------|
   | POST | http://localhost:8000/enviarPedido | `{"produtos":[{"id":9,"quantidade":2},{"id":1,"quantidade":1},{"id":8,"quantidade":2},{"id":30,"quantidade":1},{"id":20,"quantidade":1}]}` |
   | POST | http://localhost:3000/trocarStatusFila | `{"id":11,"status":"Finalizado"}` |
