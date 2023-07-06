@@ -32,7 +32,7 @@ services:
       - '3000'
     volumes:
       - ./src:/home/node/app/src
-    command: npm run start
+    # command: npm run start
     depends_on:
       - db
       - pgadmin
