@@ -1,7 +1,8 @@
 import { IUsuarioRepository } from '../../../core/applications/ports/IUsuarioRepository';
 import { Usuario } from '../../../core/domain/models/Usuario';
 import { prisma } from '../../../../../config/database';
-const bcrypt = require('bcrypt');
+import { VerificaSenha } from '../../../core/domain/valueObjects/verificaSenha';
+import { GerarHash } from '../../../core/domain/valueObjects/GerarHash';
 var jwt = require('jsonwebtoken');
 
 export class UsuarioRepository implements IUsuarioRepository {
@@ -15,7 +16,7 @@ export class UsuarioRepository implements IUsuarioRepository {
           usuario.nome,
           usuario.email,
           usuario.cpf,
-          usuario.tipo,
+          usuario.tipo
         );
       } else {
         return undefined;
@@ -65,29 +66,31 @@ export class UsuarioRepository implements IUsuarioRepository {
     });
 
     if (getUsuarioDb) {
-      let validaSenha = bcrypt.compareSync(usuario.senha, getUsuarioDb.senha);
-      if (validaSenha) {
-        let token = jwt.sign(
-          {
-            id: getUsuarioDb.id,
-            nome: getUsuarioDb.nome,
-            email: getUsuarioDb.email,
-            tipo: getUsuarioDb.tipo,
-          },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: '365d',
-          }
-        );
-        await prisma.usuario.update({
-          where: { id: getUsuarioDb.id },
-          data: { token: token },
-        });
+      if (usuario.senha != undefined && getUsuarioDb.senha != undefined) {
+        let validaSenha = new VerificaSenha(usuario.senha, getUsuarioDb.senha);
+        if (validaSenha) {
+          let token = jwt.sign(
+            {
+              id: getUsuarioDb.id,
+              nome: getUsuarioDb.nome,
+              email: getUsuarioDb.email,
+              tipo: getUsuarioDb.tipo,
+            },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: '365d',
+            }
+          );
+          await prisma.usuario.update({
+            where: { id: getUsuarioDb.id },
+            data: { token: token },
+          });
 
-        return token;
+          return token;
+        }
+      } else {
+        return undefined;
       }
-    } else {
-      return undefined;
     }
 
     return undefined;
@@ -126,6 +129,8 @@ export class UsuarioRepository implements IUsuarioRepository {
   }
 
   async salvar(usuario: Usuario): Promise<Usuario> {
+    console.log(usuario);
+    let gerarSenha = new GerarHash();
     return prisma.usuario
       .create({
         data: {
@@ -136,7 +141,7 @@ export class UsuarioRepository implements IUsuarioRepository {
           senha:
             usuario.senha == undefined
               ? null
-              : bcrypt.hashSync(usuario.senha, 10),
+              : await gerarSenha.gerarHash(usuario.senha),
         },
       })
       .then((usuario: any) => {

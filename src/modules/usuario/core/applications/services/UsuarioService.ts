@@ -1,6 +1,6 @@
 import { Usuario } from '../../domain/models/Usuario';
 import { UsuarioRepository } from '../../../adapter/driven/infra/UsuarioRepository';
-const bcrypt = require('bcrypt');
+import crypto from 'crypto';
 
 export class UsuarioService {
   async cadastraUsuario(usuario: Usuario, res: any) {
@@ -63,9 +63,6 @@ export class UsuarioService {
   }
 
   async verificaTipoUsuario(token: string) {
-    bcrypt.compare(token.includes("administrador"), token, function (err: any, result: any) {
-      console.log(result)
-    });
+    // const result = token.includes('administrador');
   }
-
 }

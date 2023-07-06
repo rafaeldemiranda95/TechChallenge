@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-const bcrypt = require('bcrypt');
+import crypto from 'crypto';
 
 async function main() {
   const produtos = await prisma.produto.createMany({
@@ -235,20 +235,19 @@ async function main() {
       },
     ],
   });
-
   const usuarios = await prisma.usuario.createMany({
     data: [
       {
         nome: 'Rafael',
         email: 'rafael@gmail.com',
-        senha: bcrypt.hashSync('123456', 10),
+        senha: await generatePasswordHash('123456'),
         cpf: '40615931022',
         tipo: 'ADMININSTRADOR',
       },
       {
         nome: 'Airton',
         email: 'airton@gmail.com',
-        senha: bcrypt.hashSync('123456', 10),
+        senha: await generatePasswordHash('123456'),
         cpf: '72721499068',
         tipo: 'CLIENTE',
       },
@@ -265,3 +264,34 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+
+async function generatePasswordHash(password: string): Promise<string> {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = await pbkdf2Async(password, salt, 100000, 64, 'sha512');
+  return `${hash.toString('hex')}:${salt}`;
+}
+
+function pbkdf2Async(
+  password: string,
+  salt: string,
+  iterations: number,
+  keylen: number,
+  digest: string
+): Promise<Buffer> {
+  return new Promise<Buffer>((resolve, reject) => {
+    crypto.pbkdf2(
+      password,
+      salt,
+      iterations,
+      keylen,
+      digest,
+      (err, derivedKey) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(derivedKey);
+        }
+      }
+    );
+  });
+}

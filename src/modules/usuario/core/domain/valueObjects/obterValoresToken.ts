@@ -2,7 +2,7 @@ import { Usuario } from '../models/Usuario';
 import { UsuarioRepository } from '../../../adapter/driven/infra/UsuarioRepository';
 const jwt = require('jsonwebtoken');
 
-export class obterValoresToken {
+export class ObterValoresToken {
   public async obterInformacoesToken(
     token: string
   ): Promise<Usuario | undefined> {
