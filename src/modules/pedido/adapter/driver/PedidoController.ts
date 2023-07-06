@@ -4,19 +4,16 @@ import { ItensPedido } from '../../core/domain/models/ItensPedido';
 import { Response } from 'express';
 import { obterValoresToken } from '../../../usuario/core/domain/valueObjects/obterValoresToken';
 export class PedidoController {
-  async enviarPedido(
-    token: any,
-    produto: Array<ItensPedido>,
-    res: Response
-  ) {
+  async enviarPedido(token: any, produto: Array<ItensPedido>, res: Response) {
     let valores = new obterValoresToken();
     let usuario: any = valores.obterInformacoesToken(token);
-    if(usuario == undefined){
+    if (usuario == undefined) {
       res.status(401).send('Token inválido!');
       return;
     }
     let pedido: Pedido = new Pedido(usuario, produto);
-    await new PedidoService().enviarPedido(pedido);
+    let response = await new PedidoService().enviarPedido(pedido);
+    return response;
   }
 
   async listaPedidos(res: Response) {

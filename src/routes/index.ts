@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
 import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
@@ -156,8 +156,8 @@ router.post(
     let produto: Array<ItensPedido> = req.body.produtos;
 
     let pedidoController = new PedidoController();
-    await pedidoController.enviarPedido(token, produto, res);
-    res.status(200).send('Pedido enviado com sucesso!');
+    let response = await pedidoController.enviarPedido(token, produto, res);
+    res.status(200).send(response);
   }
 );
 

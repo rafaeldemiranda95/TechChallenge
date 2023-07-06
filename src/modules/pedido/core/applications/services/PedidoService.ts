@@ -5,7 +5,8 @@ export class PedidoService {
   async enviarPedido(pedido: Pedido) {
     await this.calcularTotalPedido(pedido);
     await this.calcularTempoPreparo(pedido);
-    await new PedidoRepository().salvar(pedido);
+    let response = await new PedidoRepository().salvar(pedido);
+    return response;
   }
 
   async listarPedidos(): Promise<any> {
