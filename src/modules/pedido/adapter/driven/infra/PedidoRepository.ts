@@ -1,10 +1,6 @@
 import { IPedidoRepository } from '../../../core/applications/ports/IPedidoRepository';
 import { Pedido } from '../../../core/domain/models/Pedido';
 import { prisma } from '../../../../../config/database';
-import { Usuario } from '../../../../usuario/core/domain/models/Usuario';
-import { Produto } from '../../../../produto/core/domain/models/Produto';
-import { PedidoProduto } from '../../../core/domain/models/PedidoProduto';
-import { Fila } from '../../../core/domain/models/Fila';
 import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
 export class PedidoRepository implements IPedidoRepository {
   async listagemFilas(): Promise<any> {
@@ -22,12 +18,21 @@ export class PedidoRepository implements IPedidoRepository {
     // finalizado
 
     try {
-      await prisma.fila.update({
+      let fila = await prisma.fila.update({
         where: {
           id: id,
         },
         data: {
           status: status,
+        },
+      });
+      console.log('Fila ==>>', fila);
+      await prisma.pedido.update({
+        where: {
+          id: fila.pedidoId,
+        },
+        data: {
+          status: fila.status,
         },
       });
     } catch (error: any) {
@@ -47,10 +52,24 @@ export class PedidoRepository implements IPedidoRepository {
       console.log('error', error);
     }
   }
+  async listarPorStatus(status: string[]): Promise<any> {
+    try {
+      let listaPedidos = await prisma.pedido.findMany({
+        orderBy: {
+          updatedAt: 'desc',
+        },
+        where: {
+          status: { in: status },
+        },
+      });
+      return listaPedidos;
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
   async listar() {
     try {
       let pedidos = await prisma.pedido.findMany();
-
       let pedidoProduto = await prisma.pedidoProduto.findMany();
       let pedidosObj: ListagemPedidos[] = [];
       for (let item of pedidos) {
@@ -68,24 +87,23 @@ export class PedidoRepository implements IPedidoRepository {
         pedidosObj.push({
           id: item.id,
           status: item.status,
-          tempoEspera: item.tempoEspera,
-          total: item.total,
           usuarioId: item.usuarioId ? item.usuarioId : 0,
           produtos: produtos,
+          tempoEspera: item.tempoEspera ? item.tempoEspera : 0,
+          total: item.total ? item.total : 0,
         });
       }
-
       return pedidosObj;
     } catch (error: any) {}
   }
-  async salvar(pedido: Pedido): Promise<void> {
+  async salvar(pedido: Pedido): Promise<any> {
     try {
       let pedidoInsert = await prisma.pedido.create({
         data: {
           status: pedido.status,
-          tempoEspera: pedido.tempoEspera,
-          total: pedido.total,
           usuarioId: pedido.usuario.id,
+          total: pedido.total,
+          tempoEspera: pedido.tempoEspera,
         },
       });
 
@@ -95,7 +113,7 @@ export class PedidoRepository implements IPedidoRepository {
             data: {
               pedidoId: pedidoInsert.id,
               produtoId: pedidoProduto.id,
-              quantidade: 2,
+              quantidade: pedidoProduto.quantidade,
             },
           });
         }
@@ -103,6 +121,12 @@ export class PedidoRepository implements IPedidoRepository {
 
       pedido.id = pedidoInsert.id;
       await this.enviarParaFila(pedido);
+      let retorno = {
+        tempoEspera: pedido.tempoEspera,
+        status: pedido.status,
+      };
+      console.log('Pedido ==>> ', pedido);
+      return retorno;
     } catch (error: any) {
       console.log(error);
     }

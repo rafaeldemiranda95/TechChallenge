@@ -1,6 +1,6 @@
 import { cpf } from 'cpf-cnpj-validator'; 
 
-export class CPF {
+export class Cpf {
     public readonly value: boolean;
   
     constructor(value: string) {

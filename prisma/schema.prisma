@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["debian-openssl-1.1.x", "native"]
 }
 
 datasource db {
@@ -12,33 +13,33 @@ model Usuario {
   email     String    @unique
   nome      String
   cpf       String    @unique
-  tipo      String    @default("cliente")
+  tipo      String    @default("CLIENTE")
   senha     String?
   token     String?   @unique
-  categoria String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
 }
 
 model Produto {
-  id        Int       @id @default(autoincrement())
-  nome      String
-  categoria String
-  preco     Float
-  descricao String
-  imagem    String
-  pedidoId  Int?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @default(now()) @updatedAt
-  Pedido    Pedido?   @relation(fields: [pedidoId], references: [id])
+  id           Int       @id @default(autoincrement())
+  nome         String
+  categoria    String
+  preco        Float
+  descricao    String
+  imagem       String
+  tempoPreparo Float?    @default(0)
+  pedidoId     Int?
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @default(now()) @updatedAt
+  Pedido       Pedido?   @relation(fields: [pedidoId], references: [id])
 }
 
 model Pedido {
   id          Int       @id @default(autoincrement())
   usuarioId   Int?
   status      String    @default("pendente")
-  total       Float
-  tempoEspera Int
+  total       Float?
+  tempoEspera Float?    @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   pagamentoId Int?

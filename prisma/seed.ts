@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+import crypto from 'crypto';
+
 async function main() {
-  const bebidas = await prisma.produto.createMany({
+  const produtos = await prisma.produto.createMany({
     data: [
       {
         nome: 'Coca Cola 500ml',
@@ -9,6 +11,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Coca Cola',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Pepsi 500ml',
@@ -16,6 +19,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Pepsi',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Fanta 500ml',
@@ -23,6 +27,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Fanta',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Guaraná 500ml',
@@ -30,6 +35,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Guaraná',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Brahma 500ml',
@@ -37,6 +43,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Brahma',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Brahma 500ml',
@@ -44,6 +51,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Brahma',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Eisebahn 500ml',
@@ -51,6 +59,7 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Eisebahn',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
       {
         nome: 'Heineken 500ml',
@@ -58,8 +67,8 @@ async function main() {
         preco: 10.78,
         descricao: 'Um como de 500 ml de Heineken',
         imagem: 'url da imagem virá aqui',
+        tempoPreparo: 0,
       },
-
       {
         nome: 'X-Burguer',
         categoria: 'Lanche',
@@ -67,6 +76,7 @@ async function main() {
         descricao:
           'Um lanche clássico com hambúrguer, queijo e molho especial.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 10,
       },
       {
         nome: 'X-Salada',
@@ -75,6 +85,7 @@ async function main() {
         descricao:
           'Um delicioso lanche com hambúrguer, queijo, alface, tomate e maionese.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 12,
       },
       {
         nome: 'X-Tudo',
@@ -83,6 +94,7 @@ async function main() {
         descricao:
           'O lanche completo com hambúrguer, queijo, presunto, ovo, bacon, alface, tomate e maionese.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 15,
       },
       {
         nome: 'X-Frango',
@@ -91,6 +103,7 @@ async function main() {
         descricao:
           'Um lanche saboroso com filé de frango, queijo, alface, tomate e molho especial.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 12,
       },
       {
         nome: 'X-Calabresa',
@@ -99,6 +112,7 @@ async function main() {
         descricao:
           'Um lanche com linguiça calabresa, queijo, cebola, pimentão e maionese.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 10,
       },
       {
         nome: 'X-Veggie',
@@ -107,6 +121,7 @@ async function main() {
         descricao:
           'Uma opção vegetariana com hambúrguer de legumes, queijo, alface, tomate e molho especial.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 12,
       },
       {
         nome: 'X-Bacon',
@@ -115,6 +130,7 @@ async function main() {
         descricao:
           'Um lanche irresistível com hambúrguer, queijo, bacon crocante, alface, tomate e maionese.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 13,
       },
       {
         nome: 'X-Picanha',
@@ -123,6 +139,7 @@ async function main() {
         descricao:
           'Um lanche gourmet com suculento hambúrguer de picanha, queijo, cebola caramelizada e molho especial.',
         imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 15,
       },
       {
         nome: 'X-Fish',
@@ -131,14 +148,7 @@ async function main() {
         descricao:
           'Um lanche de peixe empanado, queijo, alface, tomate e molho tártaro.',
         imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'X-Frango Catupiry',
-        categoria: 'Lanche',
-        preco: 14.5,
-        descricao:
-          'Um lanche com filé de frango, queijo catupiry, alface, tomate e maionese.',
-        imagem: 'url_da_imagem_aqui',
+        tempoPreparo: 11,
       },
       {
         nome: 'Sorvete de Chocolate',
@@ -223,88 +233,25 @@ async function main() {
           'Um clássico tiramisu italiano com camadas de biscoito, café e creme de mascarpone.',
         imagem: 'url_da_imagem_aqui',
       },
+    ],
+  });
+  const usuarios = await prisma.usuario.createMany({
+    data: [
       {
-        nome: 'Batata Frita',
-        categoria: 'Acompanhamento',
-        preco: 6.5,
-        descricao: 'Deliciosas batatas fritas crocantes e temperadas.',
-        imagem: 'url_da_imagem_aqui',
+        nome: 'Rafael',
+        email: 'rafael@gmail.com',
+        senha: await generatePasswordHash('123456'),
+        cpf: '40615931022',
+        tipo: 'ADMININSTRADOR',
       },
       {
-        nome: 'Onion Rings',
-        categoria: 'Acompanhamento',
-        preco: 7.8,
-        descricao: 'Anéis de cebola empanados e crocantes.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Mandioca Frita',
-        categoria: 'Acompanhamento',
-        preco: 6.9,
-        descricao: 'Mandioca frita sequinha e saborosa.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Polenta Frita',
-        categoria: 'Acompanhamento',
-        preco: 7.2,
-        descricao: 'Polenta frita com uma crosta dourada e macia por dentro.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Arroz Branco',
-        categoria: 'Acompanhamento',
-        preco: 4.5,
-        descricao: 'Arroz branco soltinho e saboroso.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Feijão Tropeiro',
-        categoria: 'Acompanhamento',
-        preco: 8.9,
-        descricao:
-          'Uma deliciosa combinação de feijão, linguiça, bacon e farinha de mandioca.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Farofa',
-        categoria: 'Acompanhamento',
-        preco: 5.8,
-        descricao: 'Uma farofa crocante e temperada.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Salada Mista',
-        categoria: 'Acompanhamento',
-        preco: 7.5,
-        descricao:
-          'Uma combinação de folhas verdes, tomate, cenoura e outros vegetais frescos.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Legumes Grelhados',
-        categoria: 'Acompanhamento',
-        preco: 8.2,
-        descricao:
-          'Uma seleção de legumes grelhados, como abobrinha, berinjela e pimentões.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Pure de Batata',
-        categoria: 'Acompanhamento',
-        preco: 6.8,
-        descricao: 'Um purê de batata cremoso e saboroso.',
-        imagem: 'url_da_imagem_aqui',
-      },
-      {
-        nome: 'Cenoura Cozida',
-        categoria: 'Acompanhamento',
-        preco: 5.4,
-        descricao: 'Cenouras cozidas no ponto certo, macias e nutritivas.',
-        imagem: 'url_da_imagem_aqui',
+        nome: 'Airton',
+        email: 'airton@gmail.com',
+        senha: await generatePasswordHash('123456'),
+        cpf: '72721499068',
+        tipo: 'CLIENTE',
       },
     ],
-    skipDuplicates: true,
   });
 }
 
@@ -317,3 +264,34 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+
+async function generatePasswordHash(password: string): Promise<string> {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = await pbkdf2Async(password, salt, 100000, 64, 'sha512');
+  return `${hash.toString('hex')}:${salt}`;
+}
+
+function pbkdf2Async(
+  password: string,
+  salt: string,
+  iterations: number,
+  keylen: number,
+  digest: string
+): Promise<Buffer> {
+  return new Promise<Buffer>((resolve, reject) => {
+    crypto.pbkdf2(
+      password,
+      salt,
+      iterations,
+      keylen,
+      digest,
+      (err, derivedKey) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(derivedKey);
+        }
+      }
+    );
+  });
+}

@@ -1,17 +1,14 @@
 version: '3.7'
 services:
   db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
-    volumes:
-      - ./data:/var/lib/postgresql/data
+    image: "postgres"
     ports:
-      - "5432:5432"
-
+      - "2345:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "mydb"
+  
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -21,18 +18,13 @@ services:
     ports:
       - 8080:80
 
-  nodeapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
+  server:
+    build: .
     ports:
-      - 3000:3000
-    expose:
-      - '3000'
-    volumes:
-      - ./src:/home/node/app/src
-    command: npm run start
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/mydb?schema=public"
     depends_on:
       - db
       - pgadmin
+      

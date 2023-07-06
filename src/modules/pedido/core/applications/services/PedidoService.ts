@@ -1,8 +1,12 @@
 import { PedidoRepository } from '../../../adapter/driven/infra/PedidoRepository';
+import { ProdutoRepository } from '../../../../produto/adapter/driven/infra/ProdutoRepository';
 import { Pedido } from '../../domain/models/Pedido';
 export class PedidoService {
-  async enviarPedido(pedido:Pedido) {
-    await new PedidoRepository().salvar(pedido);
+  async enviarPedido(pedido: Pedido) {
+    await this.calcularTotalPedido(pedido);
+    await this.calcularTempoPreparo(pedido);
+    let response = await new PedidoRepository().salvar(pedido);
+    return response;
   }
 
   async listarPedidos(): Promise<any> {
@@ -15,5 +19,41 @@ export class PedidoService {
 
   async trocarStatusFila(id: number, status: string): Promise<void> {
     await new PedidoRepository().trocarStatusFila(id, status);
+  }
+
+  async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
+    return await new PedidoRepository().listarPorStatus(status);
+  }
+  async calcularTotalPedido(pedido: Pedido): Promise<number> {
+    let total = 0;
+    for (let item of pedido.produto) {
+      if (item.id != undefined) {
+        let produto = await new ProdutoRepository().exibirPorId(item.id);
+        total += produto.preco * item.quantidade;
+      }
+    }
+    pedido.total = total;
+    return total;
+  }
+
+  async calcularTempoPreparo(pedido: Pedido): Promise<number> {
+    let tempo = 0;
+    for (let item of pedido.produto) {
+      if (item.id != undefined) {
+        let produto = await new ProdutoRepository().exibirPorId(item.id);
+        console.log(produto);
+        if (produto.tempoPreparo)
+          tempo += produto.tempoPreparo * item.quantidade;
+      }
+    }
+    const listaPedidos = await this.listaPedidosPorStatus([
+      'Recebido',
+      'Em preparação',
+    ]);
+    console.log('Pedido[0]  ==>>  ', listaPedidos[0]);
+    tempo += listaPedidos[0].tempoEspera ? listaPedidos[0].tempoEspera : 0;
+
+    pedido.tempoEspera = tempo;
+    return tempo;
   }
 }

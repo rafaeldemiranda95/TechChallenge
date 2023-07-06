@@ -1,34 +1,39 @@
-import express from 'express';
+import express, { response } from 'express';
 import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
 import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
 import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
 import { PedidoController } from '../modules/pedido/adapter/driver/PedidoController';
 import { verificaTipoUsuario } from '../modules/usuario/adapter/middleware/verificaTipoUsuario.middlaware';
+import { ItensPedido } from '../modules/pedido/core/domain/models/ItensPedido';
 const router = express.Router();
 const usuarioService = new UsuarioService();
 router.get('/', (req, res) => {
   res.status(200).send('OK');
 });
 
-router.post('/cadastroProduto', async (req, res) => {
-  let nome = req.body.nome;
-  let categoria = req.body.categoria;
-  let preco = req.body.preco;
-  let descricao = req.body.descricao;
-  let imagem = req.body.imagem;
+router.post(
+  '/cadastroProduto',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let nome = req.body.nome;
+    let categoria = req.body.categoria;
+    let preco = req.body.preco;
+    let descricao = req.body.descricao;
+    let imagem = req.body.imagem;
 
-  const produtoController = new ProdutoController();
-  let produtoCadastrado = await produtoController.cadastrarProduto(
-    nome,
-    categoria,
-    preco,
-    descricao,
-    imagem,
-    res
-  );
-  res.status(200).send(produtoCadastrado);
-});
+    const produtoController = new ProdutoController();
+    let produtoCadastrado = await produtoController.cadastrarProduto(
+      nome,
+      categoria,
+      preco,
+      descricao,
+      imagem,
+      res
+    );
+    res.status(200).send(produtoCadastrado);
+  }
+);
 
 router.get(
   '/exibeProdutos',
@@ -143,32 +148,46 @@ router.post('/autenticaCliente', async (req, res) => {
   await usuarioController.autenticaCliente(cpf, res);
 });
 
-router.post('/enviarPedido', async (req, res) => {
-  let token = req.headers.authorization;
-  let produto = req.body.produtos;
-  let tempoEspera = req.body.tempoEspera;
-  let total = req.body.total;
+router.post(
+  '/enviarPedido',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let token = req.headers.authorization;
+    let produto: Array<ItensPedido> = req.body.produtos;
 
-  let pedidoController = new PedidoController();
-  await pedidoController.enviarPedido(token, produto, tempoEspera, total, res);
-  res.status(200).send('Pedido enviado com sucesso!');
-});
+    let pedidoController = new PedidoController();
+    let response = await pedidoController.enviarPedido(token, produto, res);
+    res.status(200).send(response);
+  }
+);
 
-router.get('/listarPedidos', async (req, res) => {
-  let pedidoController = new PedidoController();
-  await pedidoController.listaPedidos(res);
-});
+router.get(
+  '/listarPedidos',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let pedidoController = new PedidoController();
+    await pedidoController.listaPedidos(res);
+  }
+);
 
-router.get('/listarFilas', async (req, res) => {
-  let pedidoController = new PedidoController();
-  await pedidoController.listaFilas(res);
-});
+router.get(
+  '/listarFilas',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let pedidoController = new PedidoController();
+    await pedidoController.listaFilas(res);
+  }
+);
 
-router.post('/trocarStatusFila', async (req, res) => {
-  let id = req.body.id;
-  let status = req.body.status;
-  let pedidoController = new PedidoController();
-  await pedidoController.trocarStatusFila(id, status, res);
-});
+router.post(
+  '/trocarStatusFila',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let id = req.body.id;
+    let status = req.body.status;
+    let pedidoController = new PedidoController();
+    await pedidoController.trocarStatusFila(id, status, res);
+  }
+);
 
 export default router;

@@ -1,22 +1,19 @@
 import { Pedido } from '../../core/domain/models/Pedido';
 import { PedidoService } from '../../core/applications/services/PedidoService';
-import { Usuario } from '../../../usuario/core/domain/models/Usuario';
-import { Produto } from '../../../produto/core/domain/models/Produto';
+import { ItensPedido } from '../../core/domain/models/ItensPedido';
 import { Response } from 'express';
-import { obterValoresToken } from '../../../usuario/core/domain/valueObjects/obterValoresToken';
+import { ObterValoresToken } from '../../../usuario/core/domain/valueObjects/ObterValoresToken';
 export class PedidoController {
-  async enviarPedido(
-    token: any,
-    produto: Array<Produto>,
-    tempoEspera: number,
-    total: number,
-    res: Response
-  ) {
-    let valores = new obterValoresToken();
+  async enviarPedido(token: any, produto: Array<ItensPedido>, res: Response) {
+    let valores = new ObterValoresToken();
     let usuario: any = valores.obterInformacoesToken(token);
-    console.log(usuario);
-    let pedido: Pedido = new Pedido(usuario, produto, tempoEspera, total);
-    await new PedidoService().enviarPedido(pedido);
+    if (usuario == undefined) {
+      res.status(401).send('Token inválido!');
+      return;
+    }
+    let pedido: Pedido = new Pedido(usuario, produto);
+    let response = await new PedidoService().enviarPedido(pedido);
+    return response;
   }
 
   async listaPedidos(res: Response) {
