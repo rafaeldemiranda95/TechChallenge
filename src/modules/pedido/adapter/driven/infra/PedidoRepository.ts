@@ -52,6 +52,21 @@ export class PedidoRepository implements IPedidoRepository {
       console.log('error', error);
     }
   }
+  async listarPorStatus(status: string[]): Promise<any> {
+    try {
+      let listaPedidos = await prisma.pedido.findMany({
+        orderBy: {
+          updatedAt: 'desc',
+        },
+        where: {
+          status: { in: status },
+        },
+      });
+      return listaPedidos;
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
   async listar() {
     try {
       let pedidos = await prisma.pedido.findMany();

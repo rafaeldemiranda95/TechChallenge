@@ -21,6 +21,9 @@ export class PedidoService {
     await new PedidoRepository().trocarStatusFila(id, status);
   }
 
+  async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
+    return await new PedidoRepository().listarPorStatus(status);
+  }
   async calcularTotalPedido(pedido: Pedido): Promise<number> {
     let total = 0;
     for (let item of pedido.produto) {
@@ -43,6 +46,13 @@ export class PedidoService {
           tempo += produto.tempoPreparo * item.quantidade;
       }
     }
+    const listaPedidos = await this.listaPedidosPorStatus([
+      'Recebido',
+      'Em preparação',
+    ]);
+    console.log('Pedido[0]  ==>>  ', listaPedidos[0]);
+    tempo += listaPedidos[0].tempoEspera ? listaPedidos[0].tempoEspera : 0;
+
     pedido.tempoEspera = tempo;
     return tempo;
   }
