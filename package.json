@@ -13,7 +13,7 @@
     "test": "",
     "build": "tsc",
     "migrate": "prisma migrate dev --name init",
-    "start": "node dist/src/server/index.js",
+    "start": "node dist/server/index.js",
     "prisma": "npx prisma migrate dev && npx prisma db seed && npm run start",
     "dev": "nodemon src/server/index.ts"
   },

@@ -1,6 +1,6 @@
 import { UsuarioService } from '../../core/applications/services/UsuarioService';
 import { Usuario } from '../../core/domain/models/Usuario';
-import { Cpf } from '../../core/domain/valueObjects/Cpf';
+import { CPF } from '../../core/domain/valueObjects/CPF';
 export class UsuarioController {
   async cadastrarCliente(nome: string, email: string, cpf: string, res: any) {
     try {
@@ -8,7 +8,7 @@ export class UsuarioController {
       if(cpf == undefined || cpf == null || cpf == ''){
         return res.status(400).send('CPF é obrigatório');
       }
-      let cpfObj = new Cpf(cpf);
+      let cpfObj = new CPF(cpf);
       if (cpfObj.value) {
         let usuario = new Usuario(nome, email, cpf);
         await usuarioService.cadastraUsuario(usuario, res);
@@ -29,7 +29,7 @@ export class UsuarioController {
     res: any
   ) {
     try {
-      let cpfObj = new Cpf(cpf);
+      let cpfObj = new CPF(cpf);
       if (cpfObj.value) {
         let usuario = new Usuario(nome, email, cpf, 'administrador', senha);
         await new UsuarioService().cadastraAdministrador(usuario, res);
