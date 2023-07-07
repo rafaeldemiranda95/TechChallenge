@@ -129,7 +129,6 @@ export class UsuarioRepository implements IUsuarioRepository {
   }
 
   async salvar(usuario: Usuario): Promise<Usuario> {
-    console.log(usuario);
     let gerarSenha = new GerarHash();
     return prisma.usuario
       .create({

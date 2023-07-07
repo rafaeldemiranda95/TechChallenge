@@ -26,7 +26,6 @@ export class PedidoRepository implements IPedidoRepository {
           status: status,
         },
       });
-      console.log('Fila ==>>', fila);
       await prisma.pedido.update({
         where: {
           id: fila.pedidoId,
@@ -125,7 +124,6 @@ export class PedidoRepository implements IPedidoRepository {
         tempoEspera: pedido.tempoEspera,
         status: pedido.status,
       };
-      console.log('Pedido ==>> ', pedido);
       return retorno;
     } catch (error: any) {
       console.log(error);

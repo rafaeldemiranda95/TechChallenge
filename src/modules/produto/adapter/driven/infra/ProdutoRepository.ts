@@ -47,7 +47,6 @@ export class ProdutoRepository implements IProdutoRepository {
         },
       })
       .then((produto: any) => {
-        console.log(produto);
         return produto;
       }).catch((error: any) => {
         console.log(error);

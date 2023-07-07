@@ -41,7 +41,6 @@ export class PedidoService {
 
   async calcularTempoPreparo(pedido: Pedido): Promise<number | undefined> {
     try {
-      //calcular tempo de preparo
       let tempoPreparo = 0;
 
       for (let item of pedido.produto) {
