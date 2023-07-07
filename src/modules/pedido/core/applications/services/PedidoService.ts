@@ -24,19 +24,23 @@ export class PedidoService {
   async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
     return await new PedidoRepository().listarPorStatus(status);
   }
-  async calcularTotalPedido(pedido: Pedido): Promise<number> {
-    let total = 0;
-    for (let item of pedido.produto) {
-      if (item.id != undefined) {
-        let produto = await new ProdutoRepository().exibirPorId(item.id);
-        if (produto.preco)
-          total += produto.preco
-            ? produto.preco * item.quantidade
-            : 0 * item.quantidade;
+  async calcularTotalPedido(pedido: Pedido): Promise<number | undefined> {
+    try{
+      let total = 0;
+      for (let item of pedido.produto) {
+        if (item.id != undefined) {
+          let produto = await new ProdutoRepository().exibirPorId(item.id);
+          if (produto.preco)
+            total += produto.preco
+              ? produto.preco * item.quantidade
+              : 0 * item.quantidade;
+        }
       }
+      pedido.total = total;
+      return total;
+    }catch(error:any){
+      console.log('error',error)
     }
-    pedido.total = total;
-    return total;
   }
 
   async calcularTempoPreparo(pedido: Pedido): Promise<number | undefined> {
