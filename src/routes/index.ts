@@ -1,10 +1,9 @@
-import express, { response } from 'express';
+import express from 'express';
 import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
 import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
 import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
 import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
 import { PedidoController } from '../modules/pedido/adapter/driver/PedidoController';
-import { verificaTipoUsuario } from '../modules/usuario/adapter/middleware/verificaTipoUsuario.middlaware';
 import { ItensPedido } from '../modules/pedido/core/domain/models/ItensPedido';
 const router = express.Router();
 const usuarioService = new UsuarioService();

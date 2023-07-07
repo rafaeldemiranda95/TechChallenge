@@ -11,7 +11,6 @@ export class GerarHash {
       'sha512'
     );
     const hash = derivedKey.toString('hex');
-    console.log(`${hash}:${salt}`)
     return `${hash}:${salt}`;
   }
 

@@ -24,36 +24,42 @@ export class PedidoService {
   async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
     return await new PedidoRepository().listarPorStatus(status);
   }
-  async calcularTotalPedido(pedido: Pedido): Promise<number> {
-    let total = 0;
-    for (let item of pedido.produto) {
-      if (item.id != undefined) {
-        let produto = await new ProdutoRepository().exibirPorId(item.id);
-        total += produto.preco * item.quantidade;
+  async calcularTotalPedido(pedido: Pedido): Promise<number | undefined> {
+    try{
+      let total = 0;
+      for (let item of pedido.produto) {
+        if (item.id != undefined) {
+          let produto = await new ProdutoRepository().exibirPorId(item.id);
+          if (produto.preco)
+            total += produto.preco
+              ? produto.preco * item.quantidade
+              : 0 * item.quantidade;
+        }
       }
+      pedido.total = total;
+      return total;
+    }catch(error:any){
+      console.log('error',error)
     }
-    pedido.total = total;
-    return total;
   }
 
-  async calcularTempoPreparo(pedido: Pedido): Promise<number> {
-    let tempo = 0;
-    for (let item of pedido.produto) {
-      if (item.id != undefined) {
-        let produto = await new ProdutoRepository().exibirPorId(item.id);
-        console.log(produto);
-        if (produto.tempoPreparo)
-          tempo += produto.tempoPreparo * item.quantidade;
-      }
-    }
-    const listaPedidos = await this.listaPedidosPorStatus([
-      'Recebido',
-      'Em preparação',
-    ]);
-    console.log('Pedido[0]  ==>>  ', listaPedidos[0]);
-    tempo += listaPedidos[0].tempoEspera ? listaPedidos[0].tempoEspera : 0;
+  async calcularTempoPreparo(pedido: Pedido): Promise<number | undefined> {
+    try {
+      let tempoPreparo = 0;
 
-    pedido.tempoEspera = tempo;
-    return tempo;
+      for (let item of pedido.produto) {
+        if (item.id != undefined) {
+          let produto = await new ProdutoRepository().exibirPorId(item.id);
+          if (produto.tempoPreparo) {
+            tempoPreparo += produto.tempoPreparo * item.quantidade;
+          }
+        }
+      }
+
+      pedido.tempoEspera = tempoPreparo;
+      return tempoPreparo;
+    } catch (error: any) {
+      console.log('error', error);
+    }
   }
 }
