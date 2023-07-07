@@ -29,7 +29,10 @@ export class PedidoService {
     for (let item of pedido.produto) {
       if (item.id != undefined) {
         let produto = await new ProdutoRepository().exibirPorId(item.id);
-        total += produto.preco * item.quantidade;
+        if (produto.preco)
+          total += produto.preco
+            ? produto.preco * item.quantidade
+            : 0 * item.quantidade;
       }
     }
     pedido.total = total;
@@ -43,7 +46,9 @@ export class PedidoService {
         let produto = await new ProdutoRepository().exibirPorId(item.id);
         console.log(produto);
         if (produto.tempoPreparo)
-          tempo += produto.tempoPreparo * item.quantidade;
+          tempo += produto.tempoPreparo
+            ? produto.tempoPreparo * item.quantidade
+            : 0 * item.quantidade;
       }
     }
     const listaPedidos = await this.listaPedidosPorStatus([
