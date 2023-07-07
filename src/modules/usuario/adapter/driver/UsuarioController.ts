@@ -1,6 +1,6 @@
 import { UsuarioService } from '../../core/applications/services/UsuarioService';
 import { Usuario } from '../../core/domain/models/Usuario';
-import { CPF } from '../../core/domain/valueObjects/CPF';
+import { CPF } from '../../core/domain/valueObjects/cpf';
 export class UsuarioController {
   async cadastrarCliente(nome: string, email: string, cpf: string, res: any) {
     try {
