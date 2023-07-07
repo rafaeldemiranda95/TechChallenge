@@ -1,15 +1,13 @@
 version: '3.7'
 services:
   db:
-    image: "postgres"
+    image: 'postgres'
     ports:
-      - "5432:5432"
-    volumes:
-      - ./data:/var/lib/postgresql/data
+      - '2345:5432'
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "mydb"
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'mydb'
 
   pgadmin:
     image: dpage/pgadmin4
@@ -23,10 +21,10 @@ services:
   server:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/mydb?schema=public"
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/mydb?schema=public'
+      JWT_SECRET: 'mysecret123'
     depends_on:
       - db
       - pgadmin
-      
