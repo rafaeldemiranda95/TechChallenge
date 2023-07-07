@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { ObterValoresToken } from '../../../usuario/core/domain/valueObjects/obterValoresToken';
 export class PedidoController {
   async enviarPedido(token: any, produto: Array<ItensPedido>, res: Response) {
+   try {
     let valores = new ObterValoresToken();
     let usuario: any = valores.obterInformacoesToken(token);
     if (usuario == undefined) {
@@ -14,6 +15,9 @@ export class PedidoController {
     let pedido: Pedido = new Pedido(usuario, produto);
     let response = await new PedidoService().enviarPedido(pedido);
     return response;
+   } catch (error) {
+    res.status(400).send("Erro ao enviar pedido");
+   }
   }
 
   async listaPedidos(res: Response) {
