@@ -39,26 +39,24 @@ export class PedidoService {
     return total;
   }
 
-  async calcularTempoPreparo(pedido: Pedido): Promise<number> {
-    let tempo = 0;
-    for (let item of pedido.produto) {
-      if (item.id != undefined) {
-        let produto = await new ProdutoRepository().exibirPorId(item.id);
-        console.log(produto);
-        if (produto.tempoPreparo)
-          tempo += produto.tempoPreparo
-            ? produto.tempoPreparo * item.quantidade
-            : 0 * item.quantidade;
-      }
-    }
-    const listaPedidos = await this.listaPedidosPorStatus([
-      'Recebido',
-      'Em preparação',
-    ]);
-    console.log('Pedido[0]  ==>>  ', listaPedidos[0]);
-    tempo += listaPedidos[0].tempoEspera ? listaPedidos[0].tempoEspera : 0;
+  async calcularTempoPreparo(pedido: Pedido): Promise<number | undefined> {
+    try {
+      //calcular tempo de preparo
+      let tempoPreparo = 0;
 
-    pedido.tempoEspera = tempo;
-    return tempo;
+      for (let item of pedido.produto) {
+        if (item.id != undefined) {
+          let produto = await new ProdutoRepository().exibirPorId(item.id);
+          if (produto.tempoPreparo) {
+            tempoPreparo += produto.tempoPreparo * item.quantidade;
+          }
+        }
+      }
+
+      pedido.tempoEspera = tempoPreparo;
+      return tempoPreparo;
+    } catch (error: any) {
+      console.log('error', error);
+    }
   }
 }
