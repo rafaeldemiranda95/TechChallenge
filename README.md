@@ -14,11 +14,11 @@
 
 [Link gitHub](https://github.com/rafaeldemiranda95/TechChallenge)
 
-_Para rodar o projeto_: docker-compose up -d
+**Para rodar o projeto**: docker-compose up -d
 
 ## API
 
-_Como gerar o token de autrnticação de usuário_
+**Como gerar o token de autrnticação de usuário**
 
 Para gerar o token do usuário, deve-se acessar na API de Usuários os seguintes end-points:
 
