@@ -68,7 +68,22 @@ export class PedidoRepository implements IPedidoRepository {
   }
   async listar() {
     try {
-      let pedidos = await prisma.pedido.findMany();
+      let pedidos = await prisma.pedido.findMany({
+        where: {
+          AND: [
+            {
+              status: {
+                not: 'Finalizado',
+              },
+            },
+            {
+              status: {
+                not: 'finalizado',
+              },
+            },
+          ],
+        },
+      });
       let pedidoProduto = await prisma.pedidoProduto.findMany();
       let pedidosObj: ListagemPedidos[] = [];
       for (let item of pedidos) {
@@ -92,7 +107,18 @@ export class PedidoRepository implements IPedidoRepository {
           total: item.total ? item.total : 0,
         });
       }
-      return pedidosObj;
+      let pronto = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'PRONTO'
+      );
+      let recebido = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'RECEBIDO'
+      );
+      let emPreparação = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'EM PREPARAÇÃO'
+      );
+      let returnPedidosObj = pronto.concat(emPreparação, recebido);
+      return returnPedidosObj;
+      // return pedidosObj;
     } catch (error: any) {}
   }
   async salvar(pedido: Pedido): Promise<any> {
@@ -123,6 +149,7 @@ export class PedidoRepository implements IPedidoRepository {
       let retorno = {
         tempoEspera: pedido.tempoEspera,
         status: pedido.status,
+        codigo: pedido.id,
       };
       return retorno;
     } catch (error: any) {
