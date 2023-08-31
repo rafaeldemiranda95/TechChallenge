@@ -189,4 +189,14 @@ router.post(
   }
 );
 
+router.get(
+  '/statusPagamentoPedido',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let id = req.body.id;
+    let pedidoController = new PedidoController();
+    await pedidoController.statusPagamentoPedido(id, res);
+  }
+);
+
 export default router;

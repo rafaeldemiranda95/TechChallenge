@@ -24,6 +24,10 @@ export class PedidoService {
   async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
     return await new PedidoRepository().listarPorStatus(status);
   }
+
+  async statusPagamentoPedido(id: number): Promise<string> {
+    return await new PedidoRepository().statusPagamentoPedido(id);
+  }
   async calcularTotalPedido(pedido: Pedido): Promise<number | undefined> {
     try {
       let total = 0;

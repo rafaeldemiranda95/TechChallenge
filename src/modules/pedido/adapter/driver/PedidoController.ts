@@ -32,4 +32,8 @@ export class PedidoController {
     await new PedidoService().trocarStatusFila(id, status);
     res.status(200).send('Status da fila trocado com sucesso!');
   }
+  async statusPagamentoPedido(id: number, res: Response) {
+    let statusPagamento = await new PedidoService().statusPagamentoPedido(id);
+    res.status(200).send(statusPagamento);
+  }
 }

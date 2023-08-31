@@ -171,4 +171,17 @@ export class PedidoRepository implements IPedidoRepository {
       console.log('error', error);
     }
   }
+  async statusPagamentoPedido(id: number): Promise<any> {
+    try {
+      let pagamento = await prisma.pagamento.findFirst({
+        where: {
+          pedidoId: id,
+        },
+      });
+      if (pagamento) return pagamento.status;
+      return 'Solicitação de pagamento não criada!';
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
 }
