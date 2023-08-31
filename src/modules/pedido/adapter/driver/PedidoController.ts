@@ -7,7 +7,7 @@ export class PedidoController {
   async enviarPedido(token: any, produto: Array<ItensPedido>, res: Response) {
     try {
       let valores = new ObterValoresToken();
-      let usuario: any = valores.obterInformacoesToken(token);
+      let usuario: any = await valores.obterInformacoesToken(token);
       if (usuario == undefined) {
         res.status(401).send('Token inválido!');
         return;

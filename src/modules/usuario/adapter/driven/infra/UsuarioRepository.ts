@@ -16,7 +16,10 @@ export class UsuarioRepository implements IUsuarioRepository {
           usuario.nome,
           usuario.email,
           usuario.cpf,
-          usuario.tipo
+          usuario.tipo,
+          undefined,
+          undefined,
+          usuario.id
         );
       } else {
         return undefined;

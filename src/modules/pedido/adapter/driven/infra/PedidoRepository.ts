@@ -146,6 +146,7 @@ export class PedidoRepository implements IPedidoRepository {
 
       pedido.id = pedidoInsert.id;
       await this.enviarParaFila(pedido);
+      await this.criarPagamento(pedido);
       let retorno = {
         tempoEspera: pedido.tempoEspera,
         status: pedido.status,
@@ -154,6 +155,20 @@ export class PedidoRepository implements IPedidoRepository {
       return retorno;
     } catch (error: any) {
       console.log(error);
+    }
+  }
+  async criarPagamento(pedido: Pedido): Promise<void> {
+    try {
+      await prisma.pagamento.create({
+        data: {
+          pedidoId: pedido.id ? pedido.id : 0,
+          valor: pedido.total ? pedido.total : 0,
+          status: 'Pendente',
+          usuarioId: pedido.usuario.id,
+        },
+      });
+    } catch (error: any) {
+      console.log('error', error);
     }
   }
 }
