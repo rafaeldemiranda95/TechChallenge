@@ -86,26 +86,29 @@ export class PedidoRepository implements IPedidoRepository {
       });
       let pedidoProduto = await prisma.pedidoProduto.findMany();
       let pedidosObj: ListagemPedidos[] = [];
-      for (let item of pedidos) {
-        let produtos: Array<any> = [];
-        for (let item2 of pedidoProduto) {
-          if (item.id == item2.pedidoId) {
-            let produto = await prisma.produto.findUnique({
-              where: {
-                id: item2.produtoId,
-              },
-            });
-            produtos.push(produto);
+      let pedidosL = [...pedidos];
+      for (let item of pedidosL) {
+        if (item.status !== 'Finalizado') {
+          let produtos: Array<any> = [];
+          for (let item2 of pedidoProduto) {
+            if (item.id == item2.pedidoId) {
+              let produto = await prisma.produto.findUnique({
+                where: {
+                  id: item2.produtoId,
+                },
+              });
+              produtos.push(produto);
+            }
           }
+          pedidosObj.push({
+            id: item.id,
+            status: item.status,
+            usuarioId: item.usuarioId ? item.usuarioId : 0,
+            produtos: produtos,
+            tempoEspera: item.tempoEspera ? item.tempoEspera : 0,
+            total: item.total ? item.total : 0,
+          });
         }
-        pedidosObj.push({
-          id: item.id,
-          status: item.status,
-          usuarioId: item.usuarioId ? item.usuarioId : 0,
-          produtos: produtos,
-          tempoEspera: item.tempoEspera ? item.tempoEspera : 0,
-          total: item.total ? item.total : 0,
-        });
       }
       let pronto = pedidosObj.filter(
         (el) => el.status.toUpperCase() == 'PRONTO'
