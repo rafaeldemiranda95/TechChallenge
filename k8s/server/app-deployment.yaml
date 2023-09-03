@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: rafaeldemiranda/techchallenge:teste
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              value: 'postgresql://postgres:postgres@localhost:2345/mydb?schema=public'
+            - name: JWT_SECRET
+              value: mysecret123
+          workingDir: /usr/src/app
+          command: ['npm']
+          args: ['run', 'start']

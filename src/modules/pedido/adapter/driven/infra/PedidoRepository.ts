@@ -68,29 +68,38 @@ export class PedidoRepository implements IPedidoRepository {
   }
   async listar() {
     try {
-      let pedidos = await prisma.pedido.findMany();
+      let pedidos = await prisma.pedido.findMany({
+        where: {
+          status: {
+            not: 'Finalizado',
+          },
+        },
+      });
       let pedidoProduto = await prisma.pedidoProduto.findMany();
       let pedidosObj: ListagemPedidos[] = [];
-      for (let item of pedidos) {
-        let produtos: Array<any> = [];
-        for (let item2 of pedidoProduto) {
-          if (item.id == item2.pedidoId) {
-            let produto = await prisma.produto.findUnique({
-              where: {
-                id: item2.produtoId,
-              },
-            });
-            produtos.push(produto);
+      let pedidosL = [...pedidos];
+      for (let item of pedidosL) {
+        if (item.status !== 'Finalizado') {
+          let produtos: Array<any> = [];
+          for (let item2 of pedidoProduto) {
+            if (item.id == item2.pedidoId) {
+              let produto = await prisma.produto.findUnique({
+                where: {
+                  id: item2.produtoId,
+                },
+              });
+              produtos.push(produto);
+            }
           }
+          pedidosObj.push({
+            id: item.id,
+            status: item.status,
+            usuarioId: item.usuarioId ? item.usuarioId : 0,
+            produtos: produtos,
+            tempoEspera: item.tempoEspera ? item.tempoEspera : 0,
+            total: item.total ? item.total : 0,
+          });
         }
-        pedidosObj.push({
-          id: item.id,
-          status: item.status,
-          usuarioId: item.usuarioId ? item.usuarioId : 0,
-          produtos: produtos,
-          tempoEspera: item.tempoEspera ? item.tempoEspera : 0,
-          total: item.total ? item.total : 0,
-        });
       }
       return pedidosObj;
     } catch (error: any) {}
