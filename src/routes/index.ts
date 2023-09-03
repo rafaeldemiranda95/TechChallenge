@@ -1,10 +1,10 @@
 import express from 'express';
-import { ProdutoController } from '../modules/produto/adapter/driver/ProdutoController';
-import { UsuarioController } from '../modules/usuario/adapter/driver/UsuarioController';
-import { autenticacaoMiddleware } from '../modules/usuario/adapter/middleware/autenticacao.middleware';
-import { UsuarioService } from '../modules/usuario/core/applications/services/UsuarioService';
-import { PedidoController } from '../modules/pedido/adapter/driver/PedidoController';
-import { ItensPedido } from '../modules/pedido/core/domain/models/ItensPedido';
+import { ProdutoController } from '../adapter/driver/ProdutoController';
+import { UsuarioController } from '../adapter/driver/UsuarioController';
+import { autenticacaoMiddleware } from '../adapter/middleware/autenticacao.middleware';
+import { UsuarioService } from '../core/applications/services/UsuarioService';
+import { PedidoController } from '../adapter/driver/PedidoController';
+import { ItensPedido } from '../core/domain/models/ItensPedido';
 const router = express.Router();
 const usuarioService = new UsuarioService();
 router.get('/', (req, res) => {
@@ -186,6 +186,16 @@ router.post(
     let status = req.body.status;
     let pedidoController = new PedidoController();
     await pedidoController.trocarStatusFila(id, status, res);
+  }
+);
+
+router.get(
+  '/statusPagamentoPedido',
+  autenticacaoMiddleware(usuarioService),
+  async (req, res) => {
+    let id = req.body.id;
+    let pedidoController = new PedidoController();
+    await pedidoController.statusPagamentoPedido(id, res);
   }
 );
 

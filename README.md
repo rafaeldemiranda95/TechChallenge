@@ -14,7 +14,18 @@
 
 [Link gitHub](https://github.com/rafaeldemiranda95/TechChallenge)
 
+**Para rodar o projeto**: docker-compose up -d
+
 ## API
+
+**Como gerar o token de autrnticação de usuário**
+
+Para gerar o token do usuário, deve-se acessar na API de Usuários os seguintes end-points:
+
+1. Usuario Funcionário: http://localhost:3000/autenticaUsuarioAdministrador
+2. Usuário Ciente: http://localhost:3000/autenticaCliente
+
+Os end-points que necessitam do Authorization devem ter esse parâmetro passado no cabeçalho da requisição, passando o token gerado na autenticação do usuário.
 
 - Produtos
   | Método | URL | Header | Exemplo de Parâmetros |

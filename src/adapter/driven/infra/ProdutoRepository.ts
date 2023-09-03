@@ -1,6 +1,6 @@
-import { prisma } from "./../../../../../config/database";
-import { Produto } from "../../../core/domain/models/Produto";
-import { IProdutoRepository } from "./../../../core/applications/ports/IProdutoRepository";
+import { prisma } from '../../../config/database';
+import { Produto } from '../../../core/domain/models/Produto';
+import { IProdutoRepository } from '../../../core/applications/ports/IProdutoRepository';
 
 export class ProdutoRepository implements IProdutoRepository {
   async exibirLista(): Promise<Produto[]> {
@@ -37,24 +37,25 @@ export class ProdutoRepository implements IProdutoRepository {
   async salvar(produto: Produto): Promise<Produto | undefined> {
     try {
       let returnProduto = prisma.produto
-      .create({
-        data: {
-          nome: produto.nome,
-          categoria: produto.categoria,
-          preco: produto.preco,
-          descricao: produto.descricao,
-          imagem: produto.imagem,
-        },
-      })
-      .then((produto: any) => {
-        return produto;
-      }).catch((error: any) => {
-        console.log(error);
-      });
+        .create({
+          data: {
+            nome: produto.nome,
+            categoria: produto.categoria,
+            preco: produto.preco,
+            descricao: produto.descricao,
+            imagem: produto.imagem,
+          },
+        })
+        .then((produto: any) => {
+          return produto;
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
 
-    return returnProduto;
+      return returnProduto;
     } catch (error) {
-      console.log("error  ==>>  ", error);
+      console.log('error  ==>>  ', error);
     }
   }
 

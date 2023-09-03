@@ -1,5 +1,5 @@
 import { PedidoRepository } from '../../../adapter/driven/infra/PedidoRepository';
-import { ProdutoRepository } from '../../../../produto/adapter/driven/infra/ProdutoRepository';
+import { ProdutoRepository } from '../../../adapter/driven/infra/ProdutoRepository';
 import { Pedido } from '../../domain/models/Pedido';
 export class PedidoService {
   async enviarPedido(pedido: Pedido) {
@@ -24,8 +24,12 @@ export class PedidoService {
   async listaPedidosPorStatus(status: string[]): Promise<Pedido[]> {
     return await new PedidoRepository().listarPorStatus(status);
   }
+
+  async statusPagamentoPedido(id: number): Promise<string> {
+    return await new PedidoRepository().statusPagamentoPedido(id);
+  }
   async calcularTotalPedido(pedido: Pedido): Promise<number | undefined> {
-    try{
+    try {
       let total = 0;
       for (let item of pedido.produto) {
         if (item.id != undefined) {
@@ -38,8 +42,8 @@ export class PedidoService {
       }
       pedido.total = total;
       return total;
-    }catch(error:any){
-      console.log('error',error)
+    } catch (error: any) {
+      console.log('error', error);
     }
   }
 

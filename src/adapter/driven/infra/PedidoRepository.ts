@@ -1,6 +1,6 @@
 import { IPedidoRepository } from '../../../core/applications/ports/IPedidoRepository';
 import { Pedido } from '../../../core/domain/models/Pedido';
-import { prisma } from '../../../../../config/database';
+import { prisma } from '../../../config/database';
 import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
 export class PedidoRepository implements IPedidoRepository {
   async listagemFilas(): Promise<any> {
@@ -70,9 +70,18 @@ export class PedidoRepository implements IPedidoRepository {
     try {
       let pedidos = await prisma.pedido.findMany({
         where: {
-          status: {
-            not: 'Finalizado',
-          },
+          AND: [
+            {
+              status: {
+                not: 'Finalizado',
+              },
+            },
+            {
+              status: {
+                not: 'finalizado',
+              },
+            },
+          ],
         },
       });
       let pedidoProduto = await prisma.pedidoProduto.findMany();
@@ -101,7 +110,18 @@ export class PedidoRepository implements IPedidoRepository {
           });
         }
       }
-      return pedidosObj;
+      let pronto = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'PRONTO'
+      );
+      let recebido = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'RECEBIDO'
+      );
+      let emPreparação = pedidosObj.filter(
+        (el) => el.status.toUpperCase() == 'EM PREPARAÇÃO'
+      );
+      let returnPedidosObj = pronto.concat(emPreparação, recebido);
+      return returnPedidosObj;
+      // return pedidosObj;
     } catch (error: any) {}
   }
   async salvar(pedido: Pedido): Promise<any> {
@@ -129,13 +149,42 @@ export class PedidoRepository implements IPedidoRepository {
 
       pedido.id = pedidoInsert.id;
       await this.enviarParaFila(pedido);
+      await this.criarPagamento(pedido);
       let retorno = {
         tempoEspera: pedido.tempoEspera,
         status: pedido.status,
+        codigo: pedido.id,
       };
       return retorno;
     } catch (error: any) {
       console.log(error);
+    }
+  }
+  async criarPagamento(pedido: Pedido): Promise<void> {
+    try {
+      await prisma.pagamento.create({
+        data: {
+          pedidoId: pedido.id ? pedido.id : 0,
+          valor: pedido.total ? pedido.total : 0,
+          status: 'Pendente',
+          usuarioId: pedido.usuario.id,
+        },
+      });
+    } catch (error: any) {
+      console.log('error', error);
+    }
+  }
+  async statusPagamentoPedido(id: number): Promise<any> {
+    try {
+      let pagamento = await prisma.pagamento.findFirst({
+        where: {
+          pedidoId: id,
+        },
+      });
+      if (pagamento) return pagamento.status;
+      return 'Solicitação de pagamento não criada!';
+    } catch (error: any) {
+      console.log('error', error);
     }
   }
 }
