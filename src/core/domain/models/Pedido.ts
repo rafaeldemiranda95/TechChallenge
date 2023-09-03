@@ -1,4 +1,4 @@
-import { Usuario } from '../../../../usuario/core/domain/models/Usuario';
+import { Usuario } from '../../../core/domain/models/Usuario';
 import { ItensPedido } from './ItensPedido';
 export class Pedido {
   id?: number;
@@ -8,7 +8,13 @@ export class Pedido {
   tempoEspera?: number;
   total?: number;
 
-  constructor(usuario: Usuario, produto: Array<ItensPedido>, tempoEspera?: number, total?:number, id?: number) {
+  constructor(
+    usuario: Usuario,
+    produto: Array<ItensPedido>,
+    tempoEspera?: number,
+    total?: number,
+    id?: number
+  ) {
     this.produto = produto;
     this.usuario = usuario;
     this.status = 'Recebido';

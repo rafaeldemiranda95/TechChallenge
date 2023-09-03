@@ -1,5 +1,5 @@
 import { PedidoRepository } from '../../../adapter/driven/infra/PedidoRepository';
-import { ProdutoRepository } from '../../../../produto/adapter/driven/infra/ProdutoRepository';
+import { ProdutoRepository } from '../../../adapter/driven/infra/ProdutoRepository';
 import { Pedido } from '../../domain/models/Pedido';
 export class PedidoService {
   async enviarPedido(pedido: Pedido) {

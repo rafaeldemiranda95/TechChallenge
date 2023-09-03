@@ -1,6 +1,6 @@
 import { IUsuarioRepository } from '../../../core/applications/ports/IUsuarioRepository';
 import { Usuario } from '../../../core/domain/models/Usuario';
-import { prisma } from '../../../../../config/database';
+import { prisma } from '../../../config/database';
 import { VerificaSenha } from '../../../core/domain/valueObjects/VerificaSenha';
 import { GerarHash } from '../../../core/domain/valueObjects/GerarHash';
 var jwt = require('jsonwebtoken');

@@ -2,7 +2,7 @@ import { Pedido } from '../../core/domain/models/Pedido';
 import { PedidoService } from '../../core/applications/services/PedidoService';
 import { ItensPedido } from '../../core/domain/models/ItensPedido';
 import { Response } from 'express';
-import { ObterValoresToken } from '../../../usuario/core/domain/valueObjects/obterValoresToken';
+import { ObterValoresToken } from '../../core/domain/valueObjects/obterValoresToken';
 export class PedidoController {
   async enviarPedido(token: any, produto: Array<ItensPedido>, res: Response) {
     try {

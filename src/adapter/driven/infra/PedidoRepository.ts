@@ -1,6 +1,6 @@
 import { IPedidoRepository } from '../../../core/applications/ports/IPedidoRepository';
 import { Pedido } from '../../../core/domain/models/Pedido';
-import { prisma } from '../../../../../config/database';
+import { prisma } from '../../../config/database';
 import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
 export class PedidoRepository implements IPedidoRepository {
   async listagemFilas(): Promise<any> {
