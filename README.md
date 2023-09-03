@@ -22,8 +22,8 @@
 
 Para gerar o token do usuário, deve-se acessar na API de Usuários os seguintes end-points:
 
-1. Usuario Funcionário: http://localhost:3000/autenticaUsuarioAdministrador
-2. Usuário Ciente: http://localhost:3000/autenticaCliente
+1. Usuario Funcionário: /autenticaUsuarioAdministrador
+2. Usuário Ciente: /autenticaCliente
 
 Os end-points que necessitam do Authorization devem ter esse parâmetro passado no cabeçalho da requisição, passando o token gerado na autenticação do usuário.
 
