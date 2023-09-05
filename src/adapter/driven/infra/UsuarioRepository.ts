@@ -1,11 +1,11 @@
-import { IUsuarioRepository } from '../../../core/applications/ports/IUsuarioRepository';
+import { IUsuarioUseCase } from '../../../core/domain/useCases/Usuario/IUsuarioUseCase';
 import { Usuario } from '../../../core/domain/models/Usuario';
 import { prisma } from '../../../config/database';
 import { VerificaSenha } from '../../../core/domain/valueObjects/VerificaSenha';
 import { GerarHash } from '../../../core/domain/valueObjects/GerarHash';
 var jwt = require('jsonwebtoken');
 
-export class UsuarioRepository implements IUsuarioRepository {
+export class UsuarioRepository implements IUsuarioUseCase {
   async obterUsuarioPorId(id: number): Promise<Usuario | undefined> {
     try {
       let usuario = await prisma.usuario.findUnique({

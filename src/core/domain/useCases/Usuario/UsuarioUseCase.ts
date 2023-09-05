@@ -1,8 +1,8 @@
-import { Usuario } from '../../domain/models/Usuario';
-import { UsuarioRepository } from '../../../adapter/driven/infra/UsuarioRepository';
+import { Usuario } from '../../../domain/models/Usuario';
+import { UsuarioRepository } from '../../../../adapter/driven/infra/UsuarioRepository';
 import crypto from 'crypto';
 
-export class UsuarioService {
+export class UsuarioUseCase {
   async cadastraUsuario(usuario: Usuario, res: any) {
     try {
       await new UsuarioRepository().salvar(usuario);

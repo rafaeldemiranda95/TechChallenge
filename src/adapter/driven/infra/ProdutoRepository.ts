@@ -1,8 +1,8 @@
 import { prisma } from '../../../config/database';
 import { Produto } from '../../../core/domain/models/Produto';
-import { IProdutoRepository } from '../../../core/applications/ports/IProdutoRepository';
+import { IProdutoUseCase } from '../../../core/domain/useCases/Produto/IProdutoUseCase';
 
-export class ProdutoRepository implements IProdutoRepository {
+export class ProdutoRepository implements IProdutoUseCase {
   async exibirLista(): Promise<Produto[]> {
     const produtos = prisma.produto
       .findMany()

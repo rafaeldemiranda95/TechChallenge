@@ -1,7 +1,7 @@
-import { PedidoRepository } from '../../../adapter/driven/infra/PedidoRepository';
-import { ProdutoRepository } from '../../../adapter/driven/infra/ProdutoRepository';
-import { Pedido } from '../../domain/models/Pedido';
-export class PedidoService {
+import { PedidoRepository } from '../../../../adapter/driven/infra/PedidoRepository';
+import { ProdutoRepository } from '../../../../adapter/driven/infra/ProdutoRepository';
+import { Pedido } from '../../../domain/models/Pedido';
+export class PedidoUseCase {
   async enviarPedido(pedido: Pedido) {
     await this.calcularTotalPedido(pedido);
     await this.calcularTempoPreparo(pedido);

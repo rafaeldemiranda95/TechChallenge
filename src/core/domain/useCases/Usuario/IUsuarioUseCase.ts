@@ -1,5 +1,5 @@
-import { Usuario } from '../../domain/models/Usuario';
-export interface IUsuarioRepository {
+import { Usuario } from '../../models/Usuario';
+export interface IUsuarioUseCase {
   salvar(usuario: Usuario): Promise<Usuario>;
   autenticaAdministrador(usuario: Usuario): Promise<string | undefined>;
   autenticaCliente(usuario: Usuario): Promise<string | undefined>;

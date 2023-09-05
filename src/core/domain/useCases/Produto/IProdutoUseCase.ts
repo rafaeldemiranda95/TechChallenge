@@ -1,5 +1,5 @@
-import { Produto } from "../../domain/models/Produto";
-export interface IProdutoRepository {
+import { Produto } from '../../models/Produto';
+export interface IProdutoUseCase {
   salvar(produto: Produto): Promise<Produto | undefined>;
   exibirLista(): Promise<Produto[]>;
   exibirPorCategoria(categoria: string): Promise<Produto[]>;

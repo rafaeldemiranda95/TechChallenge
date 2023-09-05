@@ -1,5 +1,5 @@
-import { ProdutoRepository } from '../../../adapter/driven/infra/ProdutoRepository';
-export class ProdutoService {
+import { ProdutoRepository } from '../../../../adapter/driven/infra/ProdutoRepository';
+export class ProdutoUseCase {
   async cadastrarProduto(produto: any, res: any) {
     try {
       let produtoCriado = await new ProdutoRepository().salvar(produto);
