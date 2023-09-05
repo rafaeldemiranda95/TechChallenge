@@ -1,20 +1,20 @@
-import { UsuarioService } from '../../core/applications/services/UsuarioService';
+import { UsuarioUseCase } from '../../core/domain/useCases/Usuario/UsuarioUseCase';
 import { Usuario } from '../../core/domain/models/Usuario';
 import { CPF } from '../../core/domain/valueObjects/cpf';
 export class UsuarioController {
   async cadastrarCliente(nome: string, email: string, cpf: string, res: any) {
     try {
-      let usuarioService = new UsuarioService();
-      if(cpf == undefined || cpf == null || cpf == ''){
+      let usuarioUseCase = new UsuarioUseCase();
+      if (cpf == undefined || cpf == null || cpf == '') {
         return res.status(400).send('CPF é obrigatório');
       }
       let cpfObj = new CPF(cpf);
       if (cpfObj.value) {
         let usuario = new Usuario(nome, email, cpf);
-        await usuarioService.cadastraUsuario(usuario, res);
+        await usuarioUseCase.cadastraUsuario(usuario, res);
         return res.status(200).send('Usuário cadastrado com sucesso');
       } else {
-       return res.status(400).send('CPF inválido');
+        return res.status(400).send('CPF inválido');
       }
     } catch (error: any) {
       console.log(error);
@@ -32,7 +32,7 @@ export class UsuarioController {
       let cpfObj = new CPF(cpf);
       if (cpfObj.value) {
         let usuario = new Usuario(nome, email, cpf, 'administrador', senha);
-        await new UsuarioService().cadastraAdministrador(usuario, res);
+        await new UsuarioUseCase().cadastraAdministrador(usuario, res);
         res.status(200).send('Usuário cadastrado com sucesso');
       } else {
         res.status(400).send('CPF inválido');
@@ -45,7 +45,7 @@ export class UsuarioController {
   async autenticaAdminstrador(email: string, senha: string, res: any) {
     try {
       let usuario = new Usuario('', email, '', '', senha);
-      await new UsuarioService().autenticaAdministrador(usuario, res);
+      await new UsuarioUseCase().autenticaAdministrador(usuario, res);
     } catch (error: any) {
       console.log(error);
     }
@@ -53,7 +53,7 @@ export class UsuarioController {
   async autenticaCliente(cpf: string, res: any) {
     try {
       let usuario = new Usuario('', '', cpf, '');
-      await new UsuarioService().autenticaCliente(usuario, res);
+      await new UsuarioUseCase().autenticaCliente(usuario, res);
     } catch (error: any) {
       console.log(error);
     }

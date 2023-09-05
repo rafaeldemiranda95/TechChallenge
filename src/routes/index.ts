@@ -2,18 +2,18 @@ import express from 'express';
 import { ProdutoController } from '../adapter/driver/ProdutoController';
 import { UsuarioController } from '../adapter/driver/UsuarioController';
 import { autenticacaoMiddleware } from '../adapter/middleware/autenticacao.middleware';
-import { UsuarioService } from '../core/applications/services/UsuarioService';
+import { UsuarioUseCase } from '../core/domain/useCases/Usuario/UsuarioUseCase';
 import { PedidoController } from '../adapter/driver/PedidoController';
 import { ItensPedido } from '../core/domain/models/ItensPedido';
 const router = express.Router();
-const usuarioService = new UsuarioService();
+const usuarioUseCase = new UsuarioUseCase();
 router.get('/', (req, res) => {
   res.status(200).send('OK');
 });
 
 router.post(
   '/cadastroProduto',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let nome = req.body.nome;
     let categoria = req.body.categoria;
@@ -36,7 +36,7 @@ router.post(
 
 router.get(
   '/exibeProdutos',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     const produtoController = new ProdutoController();
     let listaDeProdutos = await produtoController.exibirProdutos(res);
@@ -46,7 +46,7 @@ router.get(
 
 router.get(
   '/exibeProdutosPorId',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let id = req.body.id;
     const produtoController = new ProdutoController();
@@ -57,7 +57,7 @@ router.get(
 
 router.get(
   '/exibeProdutosPorCategoria',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let categoria = req.body.categoria;
     const produtoController = new ProdutoController();
@@ -71,7 +71,7 @@ router.get(
 
 router.post(
   '/alteraProduto',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let id = req.body.id;
     let nome = req.body.nome;
@@ -96,7 +96,7 @@ router.post(
 
 router.post(
   '/apagarProduto',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let id = req.body.id;
     const produtoController = new ProdutoController();
@@ -115,7 +115,7 @@ router.post('/cadastroCliente', async (req, res) => {
 
 router.post(
   '/cadastroAdministrador',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let nome = req.body.nome;
     let email = req.body.email;
@@ -149,7 +149,7 @@ router.post('/autenticaCliente', async (req, res) => {
 
 router.post(
   '/enviarPedido',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let token = req.headers.authorization;
     let produto: Array<ItensPedido> = req.body.produtos;
@@ -162,7 +162,7 @@ router.post(
 
 router.get(
   '/listarPedidos',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let pedidoController = new PedidoController();
     await pedidoController.listaPedidos(res);
@@ -171,7 +171,7 @@ router.get(
 
 router.get(
   '/listarFilas',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let pedidoController = new PedidoController();
     await pedidoController.listaFilas(res);
@@ -180,7 +180,7 @@ router.get(
 
 router.post(
   '/trocarStatusFila',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let id = req.body.id;
     let status = req.body.status;
@@ -191,7 +191,7 @@ router.post(
 
 router.get(
   '/statusPagamentoPedido',
-  autenticacaoMiddleware(usuarioService),
+  autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     let id = req.body.id;
     let pedidoController = new PedidoController();

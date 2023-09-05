@@ -1,8 +1,8 @@
-import { IPedidoRepository } from '../../../core/applications/ports/IPedidoRepository';
+import { IPedidoUseCase } from '../../../core/domain/useCases/Pedido/IPedidoUseCase';
 import { Pedido } from '../../../core/domain/models/Pedido';
 import { prisma } from '../../../config/database';
 import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
-export class PedidoRepository implements IPedidoRepository {
+export class PedidoRepository implements IPedidoUseCase {
   async listagemFilas(): Promise<any> {
     try {
       let listaFila = await prisma.fila.findMany();

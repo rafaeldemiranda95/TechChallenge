@@ -1,5 +1,5 @@
 import { Pedido } from '../../core/domain/models/Pedido';
-import { PedidoService } from '../../core/applications/services/PedidoService';
+import { PedidoUseCase } from '../../core/domain/useCases/Pedido/PedidoUseCase';
 import { ItensPedido } from '../../core/domain/models/ItensPedido';
 import { Response } from 'express';
 import { ObterValoresToken } from '../../core/domain/valueObjects/obterValoresToken';
@@ -13,7 +13,7 @@ export class PedidoController {
         return;
       }
       let pedido: Pedido = new Pedido(usuario, produto);
-      let response = await new PedidoService().enviarPedido(pedido);
+      let response = await new PedidoUseCase().enviarPedido(pedido);
       return response;
     } catch (error) {
       res.status(400).send('Erro ao enviar pedido');
@@ -21,19 +21,19 @@ export class PedidoController {
   }
 
   async listaPedidos(res: Response) {
-    let pedidos = await new PedidoService().listarPedidos();
+    let pedidos = await new PedidoUseCase().listarPedidos();
     res.status(200).send(pedidos);
   }
   async listaFilas(res: Response) {
-    let filas = await new PedidoService().listaFilas();
+    let filas = await new PedidoUseCase().listaFilas();
     res.status(200).send(filas);
   }
   async trocarStatusFila(id: number, status: string, res: Response) {
-    await new PedidoService().trocarStatusFila(id, status);
+    await new PedidoUseCase().trocarStatusFila(id, status);
     res.status(200).send('Status da fila trocado com sucesso!');
   }
   async statusPagamentoPedido(id: number, res: Response) {
-    let statusPagamento = await new PedidoService().statusPagamentoPedido(id);
+    let statusPagamento = await new PedidoUseCase().statusPagamentoPedido(id);
     res.status(200).send(statusPagamento);
   }
 }
