@@ -1,12 +1,12 @@
-import { prisma } from '../../../config/database';
+import { runQuery, prisma } from '../../../config/database';
 import { Produto } from '../../../core/domain/models/Produto';
 import { IProdutoUseCase } from '../../../core/domain/useCases/Produto/IProdutoUseCase';
 
 export class ProdutoRepository implements IProdutoUseCase {
   async exibirLista(): Promise<Produto[]> {
-    const produtos = prisma.produto
-      .findMany()
-      .then((produtos: any) => produtos);
+    let query = 'SELECT * FROM produto';
+    const produtos = await runQuery(query);
+    console.log(produtos);
     return produtos;
   }
 

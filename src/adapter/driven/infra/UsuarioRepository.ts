@@ -1,17 +1,43 @@
 import { IUsuarioUseCase } from '../../../core/domain/useCases/Usuario/IUsuarioUseCase';
 import { Usuario } from '../../../core/domain/models/Usuario';
-import { prisma } from '../../../config/database';
+import { runQuery, prisma } from '../../../config/database';
 import { VerificaSenha } from '../../../core/domain/valueObjects/VerificaSenha';
 import { GerarHash } from '../../../core/domain/valueObjects/GerarHash';
 var jwt = require('jsonwebtoken');
 
 export class UsuarioRepository implements IUsuarioUseCase {
+  // async obterUsuarioPorId(id: number): Promise<Usuario | undefined> {
+  //   try {
+  //     let usuario = await prisma.usuario.findUnique({
+  //       where: { id: id },
+  //     });
+  //     if (usuario) {
+  //       return new Usuario(
+  //         usuario.nome,
+  //         usuario.email,
+  //         usuario.cpf,
+  //         usuario.tipo,
+  //         undefined,
+  //         undefined,
+  //         usuario.id
+  //       );
+  //     } else {
+  //       return undefined;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   async obterUsuarioPorId(id: number): Promise<Usuario | undefined> {
     try {
-      let usuario = await prisma.usuario.findUnique({
-        where: { id: id },
-      });
-      if (usuario) {
+      const query = 'SELECT * FROM usuario WHERE id = $1';
+      const values = [id];
+
+      const result = await runQuery(query);
+
+      if (result.length > 0) {
+        const usuario = result[0];
         return new Usuario(
           usuario.nome,
           usuario.email,
@@ -25,9 +51,10 @@ export class UsuarioRepository implements IUsuarioUseCase {
         return undefined;
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
+
   async renovarToken(token: string): Promise<string | undefined> {
     let getUsuarioDb = await prisma.usuario.findUnique({
       where: {
