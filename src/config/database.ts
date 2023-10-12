@@ -5,10 +5,10 @@ export const prisma = new PrismaClient();
 
 const client = new Pool({
   host: 'localhost',
-  port: 5432,
+  port: 5433,
   database: 'Teste',
   user: 'postgres',
-  password: '',
+  password: '123456',
 });
 
 export const runQuery = async (query: string) => {
