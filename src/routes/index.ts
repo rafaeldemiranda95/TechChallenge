@@ -36,7 +36,7 @@ router.post(
 
 router.get(
   '/exibeProdutos',
-  autenticacaoMiddleware(usuarioUseCase),
+  // autenticacaoMiddleware(usuarioUseCase),
   async (req, res) => {
     const produtoController = new ProdutoController();
     let listaDeProdutos = await produtoController.exibirProdutos(res);

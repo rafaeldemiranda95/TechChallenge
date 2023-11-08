@@ -1,16 +1,12 @@
 import { Usuario } from '../../../domain/models/Usuario';
 import { UsuarioRepository } from '../../../../adapter/driven/infra/UsuarioRepository';
-import crypto from 'crypto';
 
 export class UsuarioUseCase {
   async cadastraUsuario(usuario: Usuario, res: any) {
     try {
       await new UsuarioRepository().salvar(usuario);
     } catch (error: any) {
-      let errorType = JSON.parse(error.message);
-      if (errorType.code == 'P2002') {
-        res.status(400).send(`${errorType.field} já cadastrado`);
-      }
+      throw new Error(error.message);
     }
   }
 
@@ -60,9 +56,5 @@ export class UsuarioUseCase {
     } catch (error: any) {
       console.log(error);
     }
-  }
-
-  async verificaTipoUsuario(token: string) {
-    // const result = token.includes('administrador');
   }
 }

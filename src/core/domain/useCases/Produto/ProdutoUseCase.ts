@@ -7,7 +7,8 @@ export class ProdutoUseCase {
     } catch (error: any) {
       let errorType = JSON.parse(error.message);
       if (errorType.code == 'P2002') {
-        res.status(400).send(`${errorType.field} já cadastrado`);
+        throw new Error(errorType.field);
+        // res.status(400).send(`${errorType.field} já cadastrado`);
       }
     }
   }
@@ -21,8 +22,8 @@ export class ProdutoUseCase {
         res.status(200).send(produtos);
       }
     } catch (error: any) {
-      console.log(error);
-      res.status(204).send('Não foram encontrados produtos');
+      throw new Error(error);
+      // res.status(204).send('Não foram encontrados produtos');
     }
   }
 
@@ -35,8 +36,9 @@ export class ProdutoUseCase {
         res.status(200).send(produto);
       }
     } catch (error: any) {
-      console.log(error);
-      res.status(204).send('Produto não encontrado');
+      throw new Error(error);
+      // console.log(error);
+      // res.status(204).send('Produto não encontrado');
     }
   }
 
@@ -46,13 +48,14 @@ export class ProdutoUseCase {
         categoria
       );
       if (produtos.length == 0 || produtos == undefined) {
-        res.status(404).send('Não foram encontrados produtos');
+        throw new Error('Categoria não encontrada');
       } else {
         res.status(200).send(produtos);
       }
     } catch (error: any) {
-      console.log(error);
-      res.status(204).send('Não foram encontrados produtos');
+      throw new Error(error);
+      // console.log(error);
+      // res.status(204).send('Não foram encontrados produtos');
     }
   }
 

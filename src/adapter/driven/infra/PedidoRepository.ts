@@ -1,3 +1,4 @@
+import { runQuery } from './../../../config/database';
 import { IPedidoUseCase } from '../../../core/domain/useCases/Pedido/IPedidoUseCase';
 import { Pedido } from '../../../core/domain/models/Pedido';
 import { prisma } from '../../../config/database';
@@ -5,7 +6,9 @@ import { ListagemPedidos } from '../../../core/domain/models/ListagemPedidos';
 export class PedidoRepository implements IPedidoUseCase {
   async listagemFilas(): Promise<any> {
     try {
-      let listaFila = await prisma.fila.findMany();
+      let query = `SELECT * FROM public.fila ORDER BY id ASC`;
+      let listaFila = await runQuery(query);
+      // let listaFila = await prisma.fila.findMany();
       return listaFila;
     } catch (error: any) {
       console.log('error', error);
@@ -17,50 +20,43 @@ export class PedidoRepository implements IPedidoUseCase {
     // pronto
     // finalizado
 
+    console.log('Troca Status Fila');
     try {
-      let fila = await prisma.fila.update({
-        where: {
-          id: id,
-        },
-        data: {
-          status: status,
-        },
-      });
-      await prisma.pedido.update({
-        where: {
-          id: fila.pedidoId,
-        },
-        data: {
-          status: fila.status,
-        },
-      });
+      let filaQuery = `UPDATE public.fila SET status = '${status}' WHERE id = ${id} RETURNING *`;
+      let _fila = await runQuery(filaQuery);
+      console.log('_fila  ==>>  ', _fila);
+      if (_fila.length > 0) {
+        let fila = _fila[0];
+        let pedidoQuery = `UPDATE public.pedido SET status = '${status}' WHERE id = ${fila.id} RETURNING *`;
+        let pedido = await runQuery(pedidoQuery);
+        console.log('pedido  ==>>  ', pedido);
+      }
     } catch (error: any) {
       console.log('error', error);
     }
   }
   async enviarParaFila(pedido: Pedido): Promise<void> {
     try {
-      await prisma.fila.create({
-        data: {
-          pedidoId: pedido.id ? pedido.id : 0,
-          status: pedido.status,
-          usuarioId: pedido.usuario.id,
-        },
-      });
+      let query = `INSERT INTO public.fila(pedidoId, status, usuarioId) VALUES (${
+        pedido.id ? pedido.id : 0
+      }, ${pedido.status}, ${pedido.usuario.id})`;
+      await runQuery(query);
     } catch (error: any) {
       console.log('error', error);
     }
   }
   async listarPorStatus(status: string[]): Promise<any> {
     try {
-      let listaPedidos = await prisma.pedido.findMany({
-        orderBy: {
-          updatedAt: 'desc',
-        },
-        where: {
-          status: { in: status },
-        },
-      });
+      let query = `SELECT * FROM public.pedido where status = '${status}' order by updatedAt desc`;
+      let listaPedidos = await runQuery(query);
+      // let listaPedidos = await prisma.pedido.findMany({
+      //   orderBy: {
+      //     updatedAt: 'desc',
+      //   },
+      //   where: {
+      //     status: { in: status },
+      //   },
+      // });
       return listaPedidos;
     } catch (error: any) {
       console.log('error', error);
@@ -68,35 +64,20 @@ export class PedidoRepository implements IPedidoUseCase {
   }
   async listar() {
     try {
-      let pedidos = await prisma.pedido.findMany({
-        where: {
-          AND: [
-            {
-              status: {
-                not: 'Finalizado',
-              },
-            },
-            {
-              status: {
-                not: 'finalizado',
-              },
-            },
-          ],
-        },
-      });
-      let pedidoProduto = await prisma.pedidoProduto.findMany();
+      let query = `SELECT * FROM public.pedido where (status <> 'finalizado' and status <> 'Finalizado')`;
+      let pedidos = await runQuery(query);
+      let query2 = `SELECT * FROM public.pedidoproduto ORDER BY id ASC`;
+      let pedidoProduto = await runQuery(query2);
       let pedidosObj: ListagemPedidos[] = [];
       let pedidosL = [...pedidos];
+      console.log('pedidosL  ==>  ', pedidosL);
       for (let item of pedidosL) {
         if (item.status !== 'Finalizado') {
           let produtos: Array<any> = [];
           for (let item2 of pedidoProduto) {
-            if (item.id == item2.pedidoId) {
-              let produto = await prisma.produto.findUnique({
-                where: {
-                  id: item2.produtoId,
-                },
-              });
+            if (item.id == item2.pedidoid) {
+              let query3 = `SELECT * FROM public.produto where id = ${item2.produtoid}`;
+              let produto = await runQuery(query3);
               produtos.push(produto);
             }
           }
@@ -120,42 +101,54 @@ export class PedidoRepository implements IPedidoUseCase {
         (el) => el.status.toUpperCase() == 'EM PREPARAÇÃO'
       );
       let returnPedidosObj = pronto.concat(emPreparação, recebido);
+      console.log('returnPedidosObj  ==>  ', returnPedidosObj);
       return returnPedidosObj;
       // return pedidosObj;
     } catch (error: any) {}
   }
   async salvar(pedido: Pedido): Promise<any> {
     try {
-      let pedidoInsert = await prisma.pedido.create({
-        data: {
-          status: pedido.status,
-          usuarioId: pedido.usuario.id,
-          total: pedido.total,
-          tempoEspera: pedido.tempoEspera,
-        },
-      });
+      let query = `INSERT INTO public.pedido(status, usuarioId, total, tempoEspera) 
+      VALUES ('${pedido.status}', ${pedido.usuario.id}, ${pedido.total}, ${pedido.tempoEspera}) RETURNING *`;
+      let _pedidoInsert = await runQuery(query);
+      // let pedidoInsert = await prisma.pedido.create({
+      //   data: {
+      //     status: pedido.status,
+      //     usuarioId: pedido.usuario.id,
+      //     total: pedido.total,
+      //     tempoEspera: pedido.tempoEspera,
+      //   },
+      // });
 
-      for (let pedidoProduto of pedido.produto) {
-        if (pedidoProduto.id != undefined) {
-          await prisma.pedidoProduto.create({
-            data: {
-              pedidoId: pedidoInsert.id,
-              produtoId: pedidoProduto.id,
-              quantidade: pedidoProduto.quantidade,
-            },
-          });
+      console.log('_pedidoInsert  ==>>  ', _pedidoInsert);
+
+      if (_pedidoInsert.length > 0) {
+        let pedidoInsert = _pedidoInsert[0];
+        for (let pedidoProduto of pedido.produto) {
+          if (pedidoProduto.id != undefined) {
+            let query02 = `INSERT INTO public.pedidoproduto(pedidoId, produtoId, quantidade) 
+            VALUES (${pedidoInsert.id}, ${pedidoProduto.id}, ${pedidoProduto.quantidade}) RETURNING *`;
+            await runQuery(query02);
+            // await prisma.pedidoProduto.create({
+            //   data: {
+            //     pedidoId: pedidoInsert.id,
+            //     produtoId: pedidoProduto.id,
+            //     quantidade: pedidoProduto.quantidade,
+            //   },
+            // });
+          }
         }
-      }
 
-      pedido.id = pedidoInsert.id;
-      await this.enviarParaFila(pedido);
-      await this.criarPagamento(pedido);
-      let retorno = {
-        tempoEspera: pedido.tempoEspera,
-        status: pedido.status,
-        codigo: pedido.id,
-      };
-      return retorno;
+        pedido.id = pedidoInsert.id;
+        await this.enviarParaFila(pedido);
+        await this.criarPagamento(pedido);
+        let retorno = {
+          tempoEspera: pedido.tempoEspera,
+          status: pedido.status,
+          codigo: pedido.id,
+        };
+        return retorno;
+      }
     } catch (error: any) {
       console.log(error);
     }
@@ -176,12 +169,12 @@ export class PedidoRepository implements IPedidoUseCase {
   }
   async statusPagamentoPedido(id: number): Promise<any> {
     try {
-      let pagamento = await prisma.pagamento.findFirst({
-        where: {
-          pedidoId: id,
-        },
-      });
-      if (pagamento) return pagamento.status;
+      let query = `SELECT * FROM public.pagamento where id = ${id} RETURNING *`;
+      let _pagamento = await runQuery(query);
+      if (_pagamento.length > 0) {
+        let pagamento = _pagamento[0];
+        return pagamento.status;
+      }
       return 'Solicitação de pagamento não criada!';
     } catch (error: any) {
       console.log('error', error);
