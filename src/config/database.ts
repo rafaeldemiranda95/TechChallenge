@@ -4,11 +4,11 @@ import { Client, Pool } from 'pg';
 export const prisma = new PrismaClient();
 
 const client = new Pool({
-  host: 'localhost',
-  port: 5433,
-  database: 'Teste',
-  user: 'postgres',
-  password: '123456',
+  host: process.env.DB_HOST,
+  port: 2345,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 });
 
 export const runQuery = async (query: string) => {
